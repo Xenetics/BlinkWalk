@@ -1,28 +1,74 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TerrainManager : MonoBehaviour 
 {
+    public static TerrainManager Instance { get { return instance; } }
+    private static TerrainManager instance = null;
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+    }
+
     [SerializeField]
-    private GameObject currentChunk;
+    private GameObject startChunk;
+    [SerializeField]
+    private GameObject[] prefabs;
+
+    private List<GameObject> chunkTrain;
     [SerializeField]
     private float speed = 5f;
-    private float chunkDonePoint = -16f;
+    private int trainLength = 5;
+    private float chunkSize = 35f;
+    private float chunkDonePoint = -35f;
 
 	void Start () 
     {
-	
+        chunkTrain = new List<GameObject>();
+        chunkTrain.Add(Instantiate(startChunk, new Vector3(0, 0, 0), Quaternion.identity) as GameObject);
+        StartTrain();
 	}
 	
 	void Update () 
     {
 	    //put if game playing && not paused
-        currentChunk.transform.Translate(-speed * Time.deltaTime, 0, 0);
-
-        if(currentChunk.transform.position.x < chunkDonePoint)
+        for (int i = 0; i < chunkTrain.Count; ++i)
         {
-            //put chunk back in pool
-            //add new chunk to end of train
+            chunkTrain[i].transform.Translate(-speed * Time.deltaTime, 0, 0); // move chunks
+
+            if (chunkTrain[i].transform.position.x < chunkDonePoint)
+            {
+                Destroy(chunkTrain[i]);
+                chunkTrain.RemoveAt(i);
+                GrabNew();
+            }
         }
 	}
+
+    private void StartTrain()
+    {
+        for(int i = 1; i < trainLength; ++i)
+        {
+            GrabNew();
+        }
+    }
+
+    private void GrabNew()
+    {
+        int randomChunk = Random.RandomRange(1, prefabs.Length);
+        GameObject newChunk = Instantiate(prefabs[randomChunk], new Vector3((chunkTrain[chunkTrain.Count - 1].transform.position.x) + 35, 0, 0), Quaternion.identity) as GameObject;
+        newChunk.name = prefabs[randomChunk].name;
+        newChunk.transform.parent = this.transform;
+        chunkTrain.Add(newChunk);
+    }
 }

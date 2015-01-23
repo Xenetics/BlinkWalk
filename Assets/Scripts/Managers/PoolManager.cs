@@ -97,7 +97,34 @@ public class PoolManager : MonoBehaviour
 		//or none were left in the pool with onlyPooled set to true
 		return null;
 	}
-	
+
+    public GameObject GetObjectForNumber(int objectNumber, bool onlyPooled)
+    {
+        for (int i = 0; i < entries.Length; i++)
+        {
+            GameObject prefab = entries[i].prefab;
+            if (entries[i] == entries[objectNumber])
+            {
+                if (pool[i].Count > 0)
+                {
+                    GameObject pooledObject = pool[i][0];
+                    pool[i].RemoveAt(0);
+                    pooledObject.transform.parent = null;
+                    pooledObject.SetActive(true);
+                    return pooledObject;
+                }
+                if (!onlyPooled)
+                {
+                    GameObject newObj = Instantiate(entries[i].prefab) as GameObject;
+                    newObj.name = entries[i].prefab.name;
+                    return newObj;
+                }
+            }
+        }
+        //If we have gotten here either there was no object of the specified type
+        //or none were left in the pool with onlyPooled set to true
+        return null;
+    }
 
 	//Places the object back into a pool of the appropriate type if one exists.
 	public void PoolObject ( GameObject obj )
