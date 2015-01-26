@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour 
 {
@@ -16,8 +17,8 @@ public class PlayerController : MonoBehaviour
     private float crouchtime = 1f;
     private float crouchTimer;
 
-    private int eyeOpened = 1;
-    private int eyeClosed = 8;
+    private float maxVision = 10f;
+    public float currentVision { get; set; }
 
     private static PlayerController instance = null;
     public static PlayerController Instance { get { return instance; } }
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
             instance = this;
         }
         crouchTimer = crouchtime;
+        currentVision = maxVision;
     }
 
 	void Start () 
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
             if(crouching)
             {
-                entity.transform.localScale = new Vector3(2, 2, 1);
+                entity.transform.localScale = new Vector3(3, 2, 1);
                 crouchTimer -= Time.deltaTime;
                 if(crouchTimer <= 0f)
                 {

@@ -3,8 +3,8 @@ using System.Collections;
 
 public class RiseingHorns : MonoBehaviour 
 {
-    public float speed = 10.0f;
-    public float hornHeight = 4.5f;
+    public float speed = 2.0f;
+    public float hornHeight = -0.5f;
 	void Start () 
     {
 	

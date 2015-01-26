@@ -65,8 +65,8 @@ public class TerrainManager : MonoBehaviour
 
     private void GrabNew()
     {
-        int randomChunk = Random.RandomRange(1, prefabs.Length);
-        GameObject newChunk = Instantiate(prefabs[randomChunk], new Vector3((chunkTrain[chunkTrain.Count - 1].transform.position.x) + 35, 0, 0), Quaternion.identity) as GameObject;
+        int randomChunk = Random.RandomRange(1, prefabs.Length); // chooses what chunk at random
+        GameObject newChunk = Instantiate(prefabs[randomChunk], new Vector3((chunkTrain[chunkTrain.Count - 1].transform.position.x) + chunkSize, 0, 0), Quaternion.identity) as GameObject;
         newChunk.name = prefabs[randomChunk].name;
         newChunk.transform.parent = this.transform;
         chunkTrain.Add(newChunk);

@@ -18,7 +18,7 @@ public class StateGameLost : GameState
 	public override void StateUpdate() {}
 	public override void StateGUI() 
 	{
-        //GUILayout.Label("Lost");
+        GUILayout.Label("Lost");
         /*
         time += Time.deltaTime;
         if (time >= 8)
