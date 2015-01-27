@@ -61,9 +61,17 @@ public class PlayerController : MonoBehaviour
                 crouching = true;
             }
 
-            if (Input.GetButton("Vision"))
+            if (currentVision > 0.0f)
             {
-                Camera.main.cullingMask = LayerMask.NameToLayer("Everything");
+                if (Input.GetButton("Vision"))
+                {
+                    currentVision -= Time.deltaTime;
+                    Camera.main.cullingMask = LayerMask.NameToLayer("Everything");
+                }
+                else
+                {
+                    Camera.main.cullingMask = 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("UI");
+                }
             }
             else
             {
@@ -95,5 +103,12 @@ public class PlayerController : MonoBehaviour
     public void Reset()
     {
 
+    }
+
+    public float VisionScale()
+    {
+        float scale = currentVision / maxVision;
+
+        return scale;
     }
 }

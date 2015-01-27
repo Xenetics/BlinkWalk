@@ -18,6 +18,8 @@ public class InGameUIManager : MonoBehaviour
         {
             instance = this;
         }
+        maxBarLength = visionBar.rectTransform.sizeDelta.x;
+        originalBarPos = visionBar.rectTransform.localPosition.x;
     }
 
     public bool paused { get; set; }
@@ -25,6 +27,8 @@ public class InGameUIManager : MonoBehaviour
     private Canvas UICanvas;
     [SerializeField]
     private Image visionBar;
+    private float maxBarLength;
+    private float originalBarPos;
     [SerializeField]
     private Text timerText;
     private float time = 0f;
@@ -88,9 +92,19 @@ public class InGameUIManager : MonoBehaviour
                 
             }
             Timer(); // move into the above IF
-            
+            VisionBar();
         }
 	}
+
+    private void VisionBar()
+    {
+        float scale = PlayerController.Instance.VisionScale();
+
+        Vector3 newLength = new Vector3(maxBarLength * scale, visionBar.rectTransform.sizeDelta.y, 1);
+        visionBar.rectTransform.sizeDelta = newLength;
+        Vector3 newPosition = new Vector3(originalBarPos - (maxBarLength - visionBar.rectTransform.sizeDelta.x) * 0.5f, visionBar.rectTransform.localPosition.y, 0);
+        visionBar.rectTransform.localPosition = newPosition;
+    }
 
     private void Timer()
     {
