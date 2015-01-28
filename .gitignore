@@ -19,6 +19,8 @@ sysinfo.txt
 /*.user
 /*.unityproj
 /*.booproj
+/Assets/UnityVS/*
+/Assets/UnityVS.meta
  
 # ============ #
 # OS generated #
