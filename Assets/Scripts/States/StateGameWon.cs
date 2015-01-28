@@ -22,7 +22,6 @@ public class StateGameWon : GameState
         time += Time.deltaTime;
         if (time >= 48)
         {
-            AudioManager.Instance.leaveState = true;
             gameManager.NewGameState(gameManager.stateGameMenu);
             Application.LoadLevel("menu");
         }

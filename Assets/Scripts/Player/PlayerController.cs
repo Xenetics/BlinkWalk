@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     private float maxVision = 10f;
     public float currentVision { get; set; }
 
+    private float botOutOfScreen = -12f;
+    private float leftOutOfScreen = -19f;
+
     private static PlayerController instance = null;
     public static PlayerController Instance { get { return instance; } }
 
@@ -45,6 +48,7 @@ public class PlayerController : MonoBehaviour
 	
 	void Update () 
     {
+        //IF game is playing
         if (isAlive)
         {
             if (grounded)
@@ -92,6 +96,15 @@ public class PlayerController : MonoBehaviour
             {
                 entity.transform.localScale = new Vector3(2, 3, 1);
             }
+
+            if(entity.transform.position.y < botOutOfScreen || entity.transform.position.x < leftOutOfScreen)
+            {
+                isAlive = false;
+            }
+        }
+        else
+        {
+            InGameUIManager.Instance.EndGame();
         }
 	}
 

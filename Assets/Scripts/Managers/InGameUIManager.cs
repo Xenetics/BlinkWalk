@@ -187,6 +187,11 @@ public class InGameUIManager : MonoBehaviour
         Application.LoadLevel("menu");
     }
 
+    public void EndGame()
+    {
+        GameManager.Instance.NewGameState(GameManager.Instance.stateGameLost);
+        Application.LoadLevel("menu");
+    }
 
     private void TallyScore()
     {

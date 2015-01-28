@@ -22,7 +22,6 @@ public class AudioManager : MonoBehaviour
 
         musicOn = true;
         soundOn = true;
-        leaveState = false;
 	}
 
     public GameObject[] MusicPlayer; // maked this an array to use multiple musics so its a more general sound manager.
@@ -30,7 +29,6 @@ public class AudioManager : MonoBehaviour
     public AudioClip[] Sounds;
     public bool musicOn { get; set; }
     public bool soundOn { get; set; }
-    public bool leaveState { get; set; }
      
 	void Start () 
 	{
