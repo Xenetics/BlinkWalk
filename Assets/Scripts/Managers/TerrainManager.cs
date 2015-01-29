@@ -110,6 +110,7 @@ public class TerrainManager : MonoBehaviour
 
         switch(toSpawn)
         {
+            case 0:
             case 1:
                 int randomPoint = Random.RandomRange(0, spawnpoints.Length);
                 return spawnpoints[randomPoint].transform.position;

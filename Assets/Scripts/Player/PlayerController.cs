@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer.ToString() == "Collectable")
+        if (other.gameObject.tag == "Collectable")
         {
             Destroy(other.gameObject);
             currentVision += collectableWorth;
