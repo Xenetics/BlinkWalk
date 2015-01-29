@@ -20,7 +20,7 @@ public class MenuManager : MonoBehaviour
     private Canvas menuCanvas;
 
     [SerializeField]
-    private Canvas levelsCanvas;
+    private Canvas challengesCanvas;
     private Button[] lvlButtons;
 
     [SerializeField]
@@ -68,7 +68,7 @@ public class MenuManager : MonoBehaviour
             }
         }
 
-        if(currentCanvas == levelsCanvas)
+        if (currentCanvas == challengesCanvas)
         {
             for(int i = 0; i < lvlButtons.Length; ++i)
             {
@@ -89,11 +89,14 @@ public class MenuManager : MonoBehaviour
     {
         if (button == "play")
         {
-            //currentCanvas.gameObject.SetActive(false);
-            //currentCanvas = levelsCanvas;
-            //levelsCanvas.gameObject.SetActive(true);
-            //canvasSwapped = true;
             Application.LoadLevel("game");
+        }
+        else if(button == "challenges")
+        {
+            //currentCanvas.gameObject.SetActive(false);
+            //currentCanvas = challengesCanvas;
+            //challengesCanvas.gameObject.SetActive(true);
+            //canvasSwapped = true;
         }
         else if (button == "credits")
         {
@@ -188,7 +191,7 @@ public class MenuManager : MonoBehaviour
 
     private void GetLvlButtons()
     {
-        Button[] potentialBtns = levelsCanvas.GetComponentsInChildren<Button>();
+        Button[] potentialBtns = challengesCanvas.GetComponentsInChildren<Button>();
 
         lvlButtons = new Button[(potentialBtns.Length) - 1];
 

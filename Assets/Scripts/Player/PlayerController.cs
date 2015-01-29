@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private float maxVision = 10f;
     public float currentVision { get; set; }
+    private float collectableWorth = 0.5f;
 
     private float botOutOfScreen = -12f;
     private float leftOutOfScreen = -19f;
@@ -111,6 +112,15 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         grounded = true;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.layer.ToString() == "Collectable")
+        {
+            Destroy(other.gameObject);
+            currentVision += collectableWorth;
+        }
     }
 
     public void Reset()
