@@ -98,7 +98,7 @@ public class InGameUIManager : MonoBehaviour
 
     private void VisionBar()
     {
-        float scale = PlayerController.Instance.VisionScale();
+        float scale = RunnerPlayerController.Instance.VisionScale();
 
         Vector3 newLength = new Vector3(maxBarLength * scale, visionBar.rectTransform.sizeDelta.y, 1);
         visionBar.rectTransform.sizeDelta = newLength;

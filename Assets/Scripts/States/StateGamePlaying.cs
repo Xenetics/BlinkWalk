@@ -19,7 +19,7 @@ public class StateGamePlaying : GameState
 	
 	public override void StateUpdate() 
 	{
-        Screen.showCursor = true;
+        Screen.showCursor = false;
 	}
 	
 	public override void StateGUI() 
