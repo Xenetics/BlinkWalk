@@ -24,6 +24,6 @@ public class StateGamePlaying : GameState
 	
 	public override void StateGUI() 
 	{
-        GUILayout.Label("Playing");
+        //GUILayout.Label("Playing");
 	}
 }

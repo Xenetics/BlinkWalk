@@ -17,7 +17,7 @@ public class StateGameWon : GameState
 	public override void StateUpdate() {}
 	public override void StateGUI() 
 	{
-        GUILayout.Label("Won");
+        //GUILayout.Label("Won");
         /*
         time += Time.deltaTime;
         if (time >= 48)

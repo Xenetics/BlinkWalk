@@ -19,6 +19,6 @@ public class StateGameMenu : GameState
     }
     public override void StateGUI()
     {
-        GUILayout.Label("Menu");
+        //GUILayout.Label("Menu");
     }
 }

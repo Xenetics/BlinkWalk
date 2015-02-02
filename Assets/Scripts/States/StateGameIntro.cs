@@ -32,6 +32,6 @@ public class StateGameIntro : GameState
     }
     public override void StateGUI()
     {
-        GUILayout.Label("Intro");
+        //GUILayout.Label("Intro");
     }
 }
