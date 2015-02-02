@@ -10,7 +10,7 @@ public class StateGameIntro : GameState
 
     public override void OnStateEntered()
     {
-
+        Screen.showCursor = false;
     }
     public override void OnStateExit()
     {

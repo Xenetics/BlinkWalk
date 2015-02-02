@@ -8,7 +8,7 @@ public class StateGameWon : GameState
 
 	public override void OnStateEntered()
     {
-        
+        Screen.showCursor = true;
     }
 	public override void OnStateExit()
     {

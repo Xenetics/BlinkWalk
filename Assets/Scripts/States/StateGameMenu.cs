@@ -7,7 +7,7 @@ public class StateGameMenu : GameState
 
     public override void OnStateEntered() 
     {
-
+        Screen.showCursor = true;
     }
     public override void OnStateExit() 
     {

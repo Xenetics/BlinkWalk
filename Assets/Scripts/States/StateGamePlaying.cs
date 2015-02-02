@@ -9,7 +9,7 @@ public class StateGamePlaying : GameState
 	
 	public override void OnStateEntered()
     {
-        
+        Screen.showCursor = false;
     }
 
 	public override void OnStateExit()
@@ -19,7 +19,7 @@ public class StateGamePlaying : GameState
 	
 	public override void StateUpdate() 
 	{
-        Screen.showCursor = false;
+
 	}
 	
 	public override void StateGUI() 

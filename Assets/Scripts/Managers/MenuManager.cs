@@ -7,27 +7,35 @@ using System.Collections;
 
 public class MenuManager : MonoBehaviour 
 {
-    [SerializeField]
-    private GameObject backdrop;
-    [SerializeField]
-    private float transitionSpeed = 10.0f;
-    [SerializeField]
-    private float transitionTimer = 2.0f;
-    private float transitionTimerActual;
+    private float transitionSpeed = 1.0f;
     private bool transitioning = false;
+    private bool transitioningIn = true;
 
     [SerializeField]
     private Canvas menuCanvas;
+    [SerializeField]
+    private Image mainBackdrop;
+    [SerializeField]
+    private Image instructionImage;
+    private bool instructionsShowing = false;
+    [SerializeField]
+    private float resizeSpeed = 10f;
 
     [SerializeField]
     private Canvas challengesCanvas;
+    [SerializeField]
+    private Image challengeBackdrop;
     private Button[] lvlButtons;
 
     [SerializeField]
     private Canvas creditsCanvas;
+    [SerializeField]
+    private Image creditBackdrop;
 
     [SerializeField]
     private Canvas optionsCanvas;
+    [SerializeField]
+    private Image optionsBackdrop;
     [SerializeField]
     private Image soundOn;
     [SerializeField]
@@ -35,8 +43,11 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField]
     private Canvas highScoreCanvas;
+    [SerializeField]
+    private Image highscoreBackdrop;
 
     private Canvas currentCanvas;
+    private Image currentBackdrop;
     private bool canvasSwapped = false;
 
     private string buttonPushed;
@@ -44,29 +55,12 @@ public class MenuManager : MonoBehaviour
 	void Start () 
     {
         currentCanvas = menuCanvas;
-        transitionTimerActual = transitionTimer;
+        currentBackdrop = mainBackdrop;
 	}
 
 	void Update () 
     {
-	    if(transitioning)
-        {
-            // ADD TRANSITION HERE
-            transitionTimerActual -= Time.deltaTime;
-
-            if (transitionTimerActual <= 0.7f && canvasSwapped == false)
-            {
-                Transition(buttonPushed);
-            }
-
-            if (transitionTimerActual <= 0)
-            {
-                // RESET TRANSITION HERE
-                transitioning = false;
-                transitionTimerActual = transitionTimer;
-                canvasSwapped = false;
-            }
-        }
+        Transitions();
 
         if (currentCanvas == challengesCanvas)
         {
@@ -82,7 +76,9 @@ public class MenuManager : MonoBehaviour
                 }
             }
         }
+
         SoundImage();
+        InstructionResize();
 	}
 
     private void Transition(string button)  // swap enabled canvases
@@ -95,37 +91,47 @@ public class MenuManager : MonoBehaviour
         else if(button == "challenges")
         {
             //currentCanvas.gameObject.SetActive(false);
+            //currentBackdrop = challengeBackdrop;
             //currentCanvas = challengesCanvas;
             //challengesCanvas.gameObject.SetActive(true);
             //canvasSwapped = true;
+            //transitioningIn = true;
         }
         else if (button == "credits")
         {
             currentCanvas.gameObject.SetActive(false);
+            currentBackdrop = creditBackdrop;
             currentCanvas = creditsCanvas;
             creditsCanvas.gameObject.SetActive(true);
             canvasSwapped = true;
+            transitioningIn = true;
         }
         else if (button == "options")
         {
             currentCanvas.gameObject.SetActive(false);
+            currentBackdrop = optionsBackdrop;
             currentCanvas = optionsCanvas;
             optionsCanvas.gameObject.SetActive(true);
             canvasSwapped = true;
+            transitioningIn = true;
         }
         else if (button == "highscores")
         {
             currentCanvas.gameObject.SetActive(false);
+            currentBackdrop = highscoreBackdrop;
             currentCanvas = highScoreCanvas;
             highScoreCanvas.gameObject.SetActive(true);
             canvasSwapped = true;
+            transitioningIn = true;
         }
         else if (button == "back")
         {
             currentCanvas.gameObject.SetActive(false);
+            currentBackdrop = mainBackdrop;
             currentCanvas = menuCanvas;
             menuCanvas.gameObject.SetActive(true);
             canvasSwapped = true;
+            transitioningIn = true;
         }
         else if(button == "lvl")
         {
@@ -167,6 +173,18 @@ public class MenuManager : MonoBehaviour
         AudioManager.Instance.PlaySound("button");
         buttonPushed = "back";
         transitioning = true;
+    }
+
+    public void InstructionButton()
+    {
+        if (!instructionsShowing)
+        {
+            instructionsShowing = true;
+        }
+        else
+        {
+            instructionsShowing = false;
+        }
     }
 
     public void SoundToggle()
@@ -216,6 +234,56 @@ public class MenuManager : MonoBehaviour
         {
             soundOn.gameObject.SetActive(false);
             soundOff.gameObject.SetActive(true);
+        }
+    }
+
+    private void InstructionResize()
+    {
+        if (!instructionsShowing)
+        {
+            instructionImage.color = Color.Lerp(instructionImage.color, new Color(instructionImage.color.r, instructionImage.color.g, instructionImage.color.b, 0), Time.deltaTime * resizeSpeed * 1.5f);
+            instructionImage.rectTransform.sizeDelta = Vector2.Lerp(instructionImage.rectTransform.sizeDelta, new Vector2(1, 1), Time.deltaTime * resizeSpeed);
+            instructionImage.rectTransform.localPosition = Vector3.Lerp(instructionImage.rectTransform.localPosition, new Vector3(640, -360, 0), Time.deltaTime * resizeSpeed);
+        }
+        else
+        {
+            instructionImage.color = Color.Lerp(instructionImage.color, new Color(instructionImage.color.r, instructionImage.color.g, instructionImage.color.b, 1), Time.deltaTime * resizeSpeed * 0.5f);
+            instructionImage.rectTransform.sizeDelta = Vector2.Lerp(instructionImage.rectTransform.sizeDelta, new Vector2(300, 300), Time.deltaTime * resizeSpeed);
+            instructionImage.rectTransform.localPosition = Vector3.Lerp(instructionImage.rectTransform.localPosition, new Vector3(490, -210, 0), Time.deltaTime * resizeSpeed);
+        }
+    }
+
+    private void Transitions()
+    {
+        if (transitioning)
+        {
+            transitioningIn = false;
+            // ADD TRANSITION HERE
+            currentBackdrop.color = Color.Lerp(currentBackdrop.color, Color.white, Time.deltaTime * transitionSpeed);
+
+            if (Vector4.Distance(currentBackdrop.color, Color.white) < 0.1f)
+            {
+                currentBackdrop.color = Color.white;
+
+            }
+
+            if (currentBackdrop.color == Color.white)
+            {
+                Transition(buttonPushed);
+                transitioning = false;
+                canvasSwapped = false;
+            }
+        }
+
+        if (transitioningIn)
+        {
+            currentBackdrop.color = Color.Lerp(currentBackdrop.color, new Color(0.215f, 0.215f, 0.215f, 0.941f), Time.deltaTime * transitionSpeed);
+
+            if(Vector4.Distance(currentBackdrop.color, new Color(0.215f, 0.215f, 0.215f, 0.941f)) < 0.05f)
+            {
+                currentBackdrop.color = new Color(0.215f, 0.215f, 0.215f, 0.941f);
+                transitioningIn = false;
+            }
         }
     }
 }

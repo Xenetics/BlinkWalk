@@ -6,6 +6,8 @@ public class RunnerPlayerController : MonoBehaviour
 {
     [SerializeField]
     private GameObject entity;
+    [SerializeField]
+    private GameObject trail;
 
     [SerializeField]
     private float jumpForce = 800;
@@ -14,7 +16,7 @@ public class RunnerPlayerController : MonoBehaviour
 
     private bool crouching = false;
     [SerializeField]
-    private float crouchtime = 1f;
+    private float crouchtime = 1.5f;
     private float crouchTimer;
 
     private float maxVision = 10f;
@@ -49,8 +51,9 @@ public class RunnerPlayerController : MonoBehaviour
 	
 	void Update () 
     {
-        if (GameManager.WhatState() == "playing")
+        if (GameManager.WhatState() == "playing" && InGameUIManager.Instance.paused == false)
         {
+            HandleTrail();
             if (isAlive)
             {
                 if (grounded)
@@ -86,7 +89,7 @@ public class RunnerPlayerController : MonoBehaviour
 
                 if (crouching)
                 {
-                    entity.transform.localScale = new Vector3(3, 2, 1);
+                    entity.transform.localScale = new Vector3(3, 1.5f, 1);
                     crouchTimer -= Time.deltaTime;
                     if (crouchTimer <= 0f)
                     {
@@ -123,6 +126,11 @@ public class RunnerPlayerController : MonoBehaviour
             Destroy(other.gameObject);
             currentVision += collectableWorth;
         }
+
+        if (other.gameObject.tag == "Spike")
+        {
+            InGameUIManager.Instance.EndGame();
+        }
     }
 
     public void Reset()
@@ -135,5 +143,17 @@ public class RunnerPlayerController : MonoBehaviour
         float scale = currentVision / maxVision;
 
         return scale;
+    }
+
+    private void HandleTrail()
+    {
+        if(grounded)
+        {
+            trail.SetActive(false);
+        }
+        else
+        {
+            trail.SetActive(true);
+        }
     }
 }

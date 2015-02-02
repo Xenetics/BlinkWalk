@@ -23,6 +23,8 @@ public class TerrainManager : MonoBehaviour
     [SerializeField]
     private GameObject collectable;
     [SerializeField]
+    private GameObject spike;
+    [SerializeField]
     private GameObject startChunk;
     [SerializeField]
     private GameObject[] prefabs;
@@ -43,16 +45,18 @@ public class TerrainManager : MonoBehaviour
 	
 	void Update () 
     {
-	    //put if game playing && not paused
-        for (int i = 0; i < chunkTrain.Count; ++i)
+        if (GameManager.WhatState() == "playing" && InGameUIManager.Instance.paused == false)
         {
-            chunkTrain[i].transform.Translate(-speed * Time.deltaTime, 0, 0); // move chunks
-
-            if (chunkTrain[i].transform.position.x < chunkDonePoint) // destroy chunks and make new ones if needed
+            for (int i = 0; i < chunkTrain.Count; ++i)
             {
-                Destroy(chunkTrain[i]);
-                chunkTrain.RemoveAt(i);
-                GrabNew();
+                chunkTrain[i].transform.Translate(-speed * Time.deltaTime, 0, 0); // move chunks
+
+                if (chunkTrain[i].transform.position.x < chunkDonePoint) // destroy chunks and make new ones if needed
+                {
+                    Destroy(chunkTrain[i]);
+                    chunkTrain.RemoveAt(i);
+                    GrabNew();
+                }
             }
         }
 	}
@@ -72,13 +76,24 @@ public class TerrainManager : MonoBehaviour
         // Make and rename Chunk
         GameObject newChunk = Instantiate(prefabs[randomChunk], new Vector3((chunkTrain[chunkTrain.Count - 1].transform.position.x) + chunkSize, 0, 0), Quaternion.identity) as GameObject;
         newChunk.name = prefabs[randomChunk].name;
-        // Check for spawnpoints and decided to make a Collectable at Spawnpoint returned
-        Vector3 spawnPoint = SpawnCollectable(newChunk);
-        if (spawnPoint != Vector3.zero)
+        // Check for spawnpoints and decide to make a Collectable at Spawnpoint returned
+        Vector3 DotSpawnPoint = SpawnCollectable(newChunk);
+        if (DotSpawnPoint != Vector3.zero)
         {
-            GameObject newCollectable = Instantiate(collectable, spawnPoint, Quaternion.identity) as GameObject;
+            GameObject newCollectable = Instantiate(collectable, DotSpawnPoint, Quaternion.identity) as GameObject;
             newCollectable.name = collectable.name;
             newCollectable.transform.parent = newChunk.transform;
+        }
+        // Check for spawnpoints and decide to make spikes
+        Transform[] SpikeSpawnPoints = SpawnSpikes(newChunk);
+        if(SpikeSpawnPoints != new Transform[0])
+        {
+            foreach(Transform spikePos in SpikeSpawnPoints)
+            {
+                GameObject newSpike = Instantiate(spike, spikePos.position, Quaternion.identity) as GameObject;
+                newSpike.name = spike.name;
+                newSpike.transform.parent = newChunk.transform;
+            }
         }
         // Add chunk to ChunkTrain WOO WOO!!!!! 
         newChunk.transform.parent = this.transform;
@@ -87,19 +102,19 @@ public class TerrainManager : MonoBehaviour
     
     private Vector3 SpawnCollectable(GameObject chunk)
     {
-        Transform[] PossibleSpawnpoints = chunk.GetComponentsInChildren<Transform>();
+        Transform[] possibleSpawnpoints = chunk.GetComponentsInChildren<Transform>();
 
         Transform[] spawnpoints = new Transform[3];
 
-        for(int i = 0; i < PossibleSpawnpoints.Length; ++i)
+        for (int i = 0; i < possibleSpawnpoints.Length; ++i)
         {
-            if(PossibleSpawnpoints[i].gameObject.name == "SpawnPoint")
+            if (possibleSpawnpoints[i].gameObject.name == "DotSpawnPoint")
             {
                 for(int j = 0; j < spawnpoints.Length; ++j)
                 {
                     if(spawnpoints[j] == null)
                     {
-                        spawnpoints[j] = PossibleSpawnpoints[i];
+                        spawnpoints[j] = possibleSpawnpoints[i];
                         break;
                     }
                 }
@@ -116,6 +131,59 @@ public class TerrainManager : MonoBehaviour
                 return spawnpoints[randomPoint].transform.position;
             default:
                 return Vector3.zero;
+        }
+    }
+
+    private Transform[] SpawnSpikes(GameObject chunk)
+    {
+        Transform[] possibleSpawnpoints = chunk.GetComponentsInChildren<Transform>();
+
+        Transform[] spawnpoints = new Transform[2];
+
+        for (int i = 0; i < possibleSpawnpoints.Length; ++i)
+        {
+            if (possibleSpawnpoints[i].gameObject.name == "SpikeStrip")
+            {
+                for (int j = 0; j < spawnpoints.Length; ++j)
+                {
+                    if (spawnpoints[j] == null)
+                    {
+                        spawnpoints[j] = possibleSpawnpoints[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        int toSpawn = Random.RandomRange(0, 10);
+
+        switch (toSpawn)
+        {
+            case 0:
+            case 1:
+                int randomPoint = Random.RandomRange(0, spawnpoints.Length);
+                
+                Transform[] possibleSpikesToSpawn = spawnpoints[randomPoint].GetComponentsInChildren<Transform>();
+
+                Transform[] spikesToSpawn = new Transform[possibleSpikesToSpawn.Length - 1];
+
+                for (int i = 0; i < possibleSpikesToSpawn.Length; ++i)
+                {
+                    if (possibleSpikesToSpawn[i].gameObject.name == "SpikeSpawnPoint")
+                    {
+                        for (int j = 0; j < spikesToSpawn.Length; ++j)
+                        {
+                            if (spikesToSpawn[j] == null)
+                            {
+                                spikesToSpawn[j] = possibleSpikesToSpawn[i];
+                                break;
+                            }
+                        }
+                    }
+                }
+                return spikesToSpawn;
+            default:
+                return new Transform[0];
         }
     }
 }

@@ -8,11 +8,11 @@ public class StateGameLost : GameState
 
 	public override void OnStateEntered()
     {
-
+        Screen.showCursor = true;
     }
 	public override void OnStateExit()
     {
-
+        
     }
 	public override void StateUpdate() {}
 	public override void StateGUI() 

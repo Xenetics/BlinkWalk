@@ -5,19 +5,25 @@ public class PlatformPlayerControl : MonoBehaviour
 {
     [SerializeField]
     private GameObject entity;
+    [SerializeField]
+    private GameObject trail;
 
     [SerializeField]
-    private float moveForce = 1;
+    private float moveForce = 5;
 
     [SerializeField]
     private float jumpForce = 1;
     private bool isAlive = true;
+    [SerializeField]
     private bool grounded = true;
-    private bool walled = false;
+    [SerializeField]
+    private bool walledLeft = false;
+    [SerializeField]
+    private bool walledRight = false;
 
     private bool crouching = false;
     [SerializeField]
-    private float crouchtime = 1f;
+    private float crouchtime = 1.5f;
     private float crouchTimer;
 
     private float botOutOfScreen = -12f;
@@ -55,20 +61,26 @@ public class PlatformPlayerControl : MonoBehaviour
         {
             if (grounded)
             {
-                if (Input.GetButtonDown("Jump"))
+                if (Input.GetButton("Jump"))
                 {
                     entity.rigidbody2D.AddForce(new Vector2(0, jumpForce));
                     grounded = false;
                 }
             }
 
-            if (Input.GetButton("Left") && ! walled)
+            if (Input.GetButton("Left"))
             {
-                entity.rigidbody2D.velocity = new Vector2(-moveForce, entity.rigidbody2D.velocity.y);
+                if (!walledLeft)
+                {
+                    entity.rigidbody2D.velocity = new Vector2(-moveForce, entity.rigidbody2D.velocity.y);
+                }
             }
-            else if (Input.GetButton("Right") && !walled)
+            else if (Input.GetButton("Right"))
             {
-                entity.rigidbody2D.velocity = new Vector2(moveForce, entity.rigidbody2D.velocity.y);
+                if (!walledRight)
+                {
+                    entity.rigidbody2D.velocity = new Vector2(moveForce, entity.rigidbody2D.velocity.y);
+                }
             }
             else
             {
@@ -80,7 +92,7 @@ public class PlatformPlayerControl : MonoBehaviour
 
             if (Input.GetButton("Crouch"))
             {
-                entity.transform.localScale = new Vector3(3, 2, 1);
+                entity.transform.localScale = new Vector3(3, 1.5f, 1);
             }
             else
             {
@@ -97,32 +109,66 @@ public class PlatformPlayerControl : MonoBehaviour
         {
             //InChallengeUIManager.Instance.EndGame();
         }
+        HandleTrail();
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Floor" || other.gameObject.tag == "Platform")
+        if (other.contacts.Length > 0)
         {
-            grounded = true;
-            walled = false;
+            ContactPoint2D contact = other.contacts[0];
+            if (Vector2.Dot(contact.normal, Vector2.up) > 0.5)
+            {
+                grounded = true;
+            }
+
+            if(Vector2.Dot(contact.normal, -Vector2.right) > 0.5)
+            {
+                walledRight = true;
+            }
+            else
+            {
+                walledRight = false;
+            }
+
+            if (Vector2.Dot(contact.normal, Vector2.right) > 0.5)
+            {
+                walledLeft = true;
+            }
+            else
+            {
+                walledLeft = false;
+            }
         }
     }
 
     void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Wall" && !grounded)
-        {
-            walled = true;
-        }
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-
+        if (other.gameObject.tag == "Spike")
+        {
+            InGameUIManager.Instance.EndGame();
+        }
     }
 
     public void Reset()
     {
 
+    }
+
+    private void HandleTrail()
+    {
+        if (grounded)
+        {
+            trail.SetActive(false);
+        }
+        else
+        {
+            trail.SetActive(true);
+        }
     }
 }

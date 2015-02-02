@@ -26,6 +26,11 @@ public class InGameUIManager : MonoBehaviour
     [SerializeField]
     private Canvas UICanvas;
     [SerializeField]
+    private Image transitionLayer;
+    private float transitionSpeed = 1.0f;
+    private bool transitioning = false;
+    private bool transitioningIn = true;
+    [SerializeField]
     private Image visionBar;
     private float maxBarLength;
     private float originalBarPos;
@@ -52,6 +57,8 @@ public class InGameUIManager : MonoBehaviour
 	
 	void Update () 
     {
+        Transitions();
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (paused)
@@ -66,27 +73,6 @@ public class InGameUIManager : MonoBehaviour
 
         if (!paused)
         {
-            /*
-            if (tutDone == false)
-            {
-                if (time > 5)
-                {
-                    InstructionImage.color = new Color(InstructionImage.color.r, InstructionImage.color.g, InstructionImage.color.b, InstructionImage.color.a - Time.deltaTime);
-                }
-                InstructionCanvas.gameObject.SetActive(true);
-                if (InstructionImage.color.a < 0)
-                {
-                    tutDone = true;
-                }
-            }
-            else
-            {
-                InstructionImage.color = new Color(InstructionImage.color.r, InstructionImage.color.g, InstructionImage.color.b, 255);
-                InstructionCanvas.gameObject.SetActive(false);
-
-            }
-            */
-
             if (GameManager.WhatState() == "playing")
             {
                 
@@ -157,7 +143,7 @@ public class InGameUIManager : MonoBehaviour
         {
             paused = true;
 
-            UICanvas.gameObject.SetActive(false);
+            //UICanvas.gameObject.SetActive(false);
             PausedCanvas.gameObject.SetActive(true);
         }
         else
@@ -165,7 +151,7 @@ public class InGameUIManager : MonoBehaviour
             paused = false;
 
             PausedCanvas.gameObject.SetActive(false);
-            UICanvas.gameObject.SetActive(true);
+            //UICanvas.gameObject.SetActive(true);
         }
     }
 
@@ -190,7 +176,7 @@ public class InGameUIManager : MonoBehaviour
     public void EndGame()
     {
         GameManager.Instance.NewGameState(GameManager.Instance.stateGameLost);
-        Application.LoadLevel("menu");
+        transitioning = true;
     }
 
     private void TallyScore()
@@ -201,5 +187,33 @@ public class InGameUIManager : MonoBehaviour
     private void SaveScore()
     {
 
+    }
+
+    private void Transitions()
+    {
+        if (transitioning)
+        {
+            // ADD TRANSITION HERE
+            transitionLayer.color = Color.Lerp(transitionLayer.color, Color.white, Time.deltaTime * transitionSpeed);
+
+            if (Vector4.Distance(transitionLayer.color, Color.white) < 0.1f)
+            {
+                transitionLayer.color = Color.white;
+                transitioning = false;
+                GameManager.Instance.NewGameState(GameManager.Instance.stateGameMenu);
+                Application.LoadLevel("menu");
+            }
+        }
+
+        if (transitioningIn)
+        {
+            transitionLayer.color = Color.Lerp(transitionLayer.color, new Color(0.0f, 0.0f, 0.0f, 0.0f), Time.deltaTime * transitionSpeed);
+
+            if (Vector4.Distance(transitionLayer.color, new Color(0.0f, 0.0f, 0.0f, 0.0f)) < 0.05f)
+            {
+                transitionLayer.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+                transitioningIn = false;
+            }
+        }
     }
 }
