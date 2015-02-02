@@ -142,14 +142,14 @@ public class InGameUIManager : MonoBehaviour
         if (isPaused)
         {
             paused = true;
-
+            Time.timeScale = 0.0f;
             //UICanvas.gameObject.SetActive(false);
             PausedCanvas.gameObject.SetActive(true);
         }
         else
         {
             paused = false;
-
+            Time.timeScale = 1.0f;
             PausedCanvas.gameObject.SetActive(false);
             //UICanvas.gameObject.SetActive(true);
         }
