@@ -17,12 +17,12 @@ public class RaycastMouse : MonoBehaviour
 	
 	void OnDisable()
 	{
-		Screen.showCursor = true;	
+		Cursor.visible = true;	
 	}
 	
     void Update () 
 	{
-		Screen.showCursor = false;
+		Cursor.visible = false;
 	}
 	
 	void OnGUI()

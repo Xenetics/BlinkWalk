@@ -7,6 +7,12 @@ public class PlatformPlayerControl : MonoBehaviour
     private GameObject entity;
     [SerializeField]
     private GameObject trail;
+    [SerializeField]
+    private ParticleSystemRenderer particleTexture;
+    [SerializeField]
+    private Material upRightParticle;
+    [SerializeField]
+    private Material crouchParticle;
 
     [SerializeField]
     private float moveForce = 5;
@@ -63,7 +69,7 @@ public class PlatformPlayerControl : MonoBehaviour
             {
                 if (Input.GetButton("Jump"))
                 {
-                    entity.rigidbody2D.AddForce(new Vector2(0, jumpForce));
+                    entity.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
                     grounded = false;
                 }
             }
@@ -72,30 +78,32 @@ public class PlatformPlayerControl : MonoBehaviour
             {
                 if (!walledLeft)
                 {
-                    entity.rigidbody2D.velocity = new Vector2(-moveForce, entity.rigidbody2D.velocity.y);
+                    entity.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveForce, entity.GetComponent<Rigidbody2D>().velocity.y);
                 }
             }
             else if (Input.GetButton("Right"))
             {
                 if (!walledRight)
                 {
-                    entity.rigidbody2D.velocity = new Vector2(moveForce, entity.rigidbody2D.velocity.y);
+                    entity.GetComponent<Rigidbody2D>().velocity = new Vector2(moveForce, entity.GetComponent<Rigidbody2D>().velocity.y);
                 }
             }
             else
             {
-                if ((entity.rigidbody2D.velocity.x < moveForce * 0.75f && entity.rigidbody2D.velocity.x > 0) || (entity.rigidbody2D.velocity.x > -moveForce * 0.75f && entity.rigidbody2D.velocity.x < 0))
+                if ((entity.GetComponent<Rigidbody2D>().velocity.x < moveForce * 0.75f && entity.GetComponent<Rigidbody2D>().velocity.x > 0) || (entity.GetComponent<Rigidbody2D>().velocity.x > -moveForce * 0.75f && entity.GetComponent<Rigidbody2D>().velocity.x < 0))
                 {
-                    entity.rigidbody2D.velocity = new Vector2(0, entity.rigidbody2D.velocity.y);
+                    entity.GetComponent<Rigidbody2D>().velocity = new Vector2(0, entity.GetComponent<Rigidbody2D>().velocity.y);
                 }
             }
 
             if (Input.GetButton("Crouch"))
             {
+                crouching = true;
                 entity.transform.localScale = new Vector3(3, 1.5f, 1);
             }
             else
             {
+                crouching = false;
                 entity.transform.localScale = new Vector3(2, 3, 1);
             }
             /*
@@ -162,13 +170,15 @@ public class PlatformPlayerControl : MonoBehaviour
 
     private void HandleTrail()
     {
-        if (grounded)
+        trail.SetActive(true);
+
+        if(!crouching)
         {
-            trail.SetActive(false);
+            particleTexture.material = upRightParticle;
         }
         else
         {
-            trail.SetActive(true);
+            particleTexture.material = crouchParticle;
         }
     }
 }

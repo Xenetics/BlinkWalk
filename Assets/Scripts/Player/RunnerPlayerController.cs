@@ -8,6 +8,12 @@ public class RunnerPlayerController : MonoBehaviour
     private GameObject entity;
     [SerializeField]
     private GameObject trail;
+    [SerializeField]
+    private ParticleSystemRenderer particleTexture;
+    [SerializeField]
+    private Material upRightParticle;
+    [SerializeField]
+    private Material crouchParticle;
 
     [SerializeField]
     private float jumpForce = 800;
@@ -60,7 +66,7 @@ public class RunnerPlayerController : MonoBehaviour
                 {
                     if (Input.GetButtonDown("Jump"))
                     {
-                        entity.rigidbody2D.AddForce(new Vector2(0, jumpForce));
+                        entity.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
                         grounded = false;
                     }
                 }
@@ -147,13 +153,15 @@ public class RunnerPlayerController : MonoBehaviour
 
     private void HandleTrail()
     {
-        if(grounded)
+        trail.SetActive(true);
+
+        if (!crouching)
         {
-            trail.SetActive(false);
+            particleTexture.material = upRightParticle;
         }
         else
         {
-            trail.SetActive(true);
+            particleTexture.material = crouchParticle;
         }
     }
 }

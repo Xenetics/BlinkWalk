@@ -64,19 +64,19 @@ public class AudioManager : MonoBehaviour
             string tempName = Application.loadedLevelName;
             if (musicOn && tempName == Musics[i].gameObject.name)
             {
-                Musics[i].audio.mute = false;
-                if (!Musics[i].audio.isPlaying)
+                Musics[i].GetComponent<AudioSource>().mute = false;
+                if (!Musics[i].GetComponent<AudioSource>().isPlaying)
                 {
-                    Musics[i].audio.Play();
+                    Musics[i].GetComponent<AudioSource>().Play();
                 }
             }
             else
             {
                 Musics[i].transform.parent = gameObject.transform;
-                Musics[i].audio.mute = true;
-                if (Musics[i].audio.isPlaying)
+                Musics[i].GetComponent<AudioSource>().mute = true;
+                if (Musics[i].GetComponent<AudioSource>().isPlaying)
                 {
-                    Musics[i].audio.Stop();
+                    Musics[i].GetComponent<AudioSource>().Stop();
                 }
             }
         }
@@ -90,7 +90,7 @@ public class AudioManager : MonoBehaviour
             add.name = MusicPlayer[i].name;
             Musics[i] = add;
             Musics[i].transform.parent = gameObject.transform;
-            Musics[i].audio.mute = true;
+            Musics[i].GetComponent<AudioSource>().mute = true;
         }
     }
     
