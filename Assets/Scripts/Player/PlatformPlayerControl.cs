@@ -5,14 +5,14 @@ public class PlatformPlayerControl : MonoBehaviour
 {
     [SerializeField]
     private GameObject entity;
+    private Rigidbody2D entityPhysics;
     [SerializeField]
-    private GameObject trail;
+    private ParticleSystem upRightTrail;
     [SerializeField]
-    private ParticleSystemRenderer particleTexture;
+    private ParticleSystem crouchTrail;
+
     [SerializeField]
-    private Material upRightParticle;
-    [SerializeField]
-    private Material crouchParticle;
+    private ParticleSystem explosionParticle;
 
     [SerializeField]
     private float moveForce = 5;
@@ -20,11 +20,8 @@ public class PlatformPlayerControl : MonoBehaviour
     [SerializeField]
     private float jumpForce = 1;
     private bool isAlive = true;
-    [SerializeField]
     private bool grounded = true;
-    [SerializeField]
     private bool walledLeft = false;
-    [SerializeField]
     private bool walledRight = false;
 
     private bool crouching = false;
@@ -50,6 +47,7 @@ public class PlatformPlayerControl : MonoBehaviour
             instance = this;
         }
         crouchTimer = crouchtime;
+        entityPhysics = entity.GetComponentInChildren<Rigidbody2D>();
     }
 
     void Start()
@@ -69,7 +67,7 @@ public class PlatformPlayerControl : MonoBehaviour
             {
                 if (Input.GetButton("Jump"))
                 {
-                    entity.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
+                    entityPhysics.AddForce(new Vector2(0, jumpForce));
                     grounded = false;
                 }
             }
@@ -78,21 +76,21 @@ public class PlatformPlayerControl : MonoBehaviour
             {
                 if (!walledLeft)
                 {
-                    entity.GetComponent<Rigidbody2D>().velocity = new Vector2(-moveForce, entity.GetComponent<Rigidbody2D>().velocity.y);
+                    entityPhysics.velocity = new Vector2(-moveForce, entityPhysics.velocity.y);
                 }
             }
             else if (Input.GetButton("Right"))
             {
                 if (!walledRight)
                 {
-                    entity.GetComponent<Rigidbody2D>().velocity = new Vector2(moveForce, entity.GetComponent<Rigidbody2D>().velocity.y);
+                    entityPhysics.velocity = new Vector2(moveForce, entityPhysics.velocity.y);
                 }
             }
             else
             {
-                if ((entity.GetComponent<Rigidbody2D>().velocity.x < moveForce * 0.75f && entity.GetComponent<Rigidbody2D>().velocity.x > 0) || (entity.GetComponent<Rigidbody2D>().velocity.x > -moveForce * 0.75f && entity.GetComponent<Rigidbody2D>().velocity.x < 0))
+                if ((entityPhysics.velocity.x < moveForce * 0.75f && entityPhysics.velocity.x > 0) || (entityPhysics.velocity.x > -moveForce * 0.75f && entityPhysics.velocity.x < 0))
                 {
-                    entity.GetComponent<Rigidbody2D>().velocity = new Vector2(0, entity.GetComponent<Rigidbody2D>().velocity.y);
+                    entityPhysics.velocity = new Vector2(0, entityPhysics.velocity.y);
                 }
             }
 
@@ -159,7 +157,9 @@ public class PlatformPlayerControl : MonoBehaviour
     {
         if (other.gameObject.tag == "Spike")
         {
-            InGameUIManager.Instance.EndGame();
+            entity.GetComponentInChildren<MeshRenderer>().enabled = false;
+            explosionParticle.Play();
+            isAlive = false;
         }
     }
 
@@ -170,15 +170,21 @@ public class PlatformPlayerControl : MonoBehaviour
 
     private void HandleTrail()
     {
-        trail.SetActive(true);
-
-        if(!crouching)
+        if (!crouching && entityPhysics.velocity.magnitude > 0)
         {
-            particleTexture.material = upRightParticle;
+            upRightTrail.emissionRate = 10;
+            crouchTrail.emissionRate = 0;
+            
+        }
+        else if (crouching && entityPhysics.velocity.magnitude > 0)
+        {
+            crouchTrail.emissionRate = 10;
+            upRightTrail.emissionRate = 0;
         }
         else
         {
-            particleTexture.material = crouchParticle;
+            upRightTrail.emissionRate = 0;
+            crouchTrail.emissionRate = 0;
         }
     }
 }

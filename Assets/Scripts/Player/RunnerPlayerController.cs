@@ -6,8 +6,11 @@ public class RunnerPlayerController : MonoBehaviour
 {
     [SerializeField]
     private GameObject entity;
+    private Vector2 entityOrigin;
+    private float correctionSpeed = 1;
+    private Rigidbody2D entityPhysics;
     [SerializeField]
-    private GameObject trail;
+    private ParticleSystem trail;
     [SerializeField]
     private ParticleSystemRenderer particleTexture;
     [SerializeField]
@@ -16,10 +19,12 @@ public class RunnerPlayerController : MonoBehaviour
     private Material crouchParticle;
 
     [SerializeField]
+    private ParticleSystem explosionParticle;
+
+    [SerializeField]
     private float jumpForce = 800;
     private bool isAlive = true;
     private bool grounded = true;
-
     private bool crouching = false;
     [SerializeField]
     private float crouchtime = 1.5f;
@@ -48,6 +53,8 @@ public class RunnerPlayerController : MonoBehaviour
         }
         crouchTimer = crouchtime;
         currentVision = maxVision;
+        entityPhysics = entity.GetComponentInChildren<Rigidbody2D>();
+        entityOrigin = entity.transform.position;
     }
 
 	void Start () 
@@ -66,8 +73,13 @@ public class RunnerPlayerController : MonoBehaviour
                 {
                     if (Input.GetButtonDown("Jump"))
                     {
-                        entity.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce));
+                        entityPhysics.AddForce(new Vector2(0, jumpForce));
                         grounded = false;
+                    }
+
+                    if (entity.transform.position.x < entityOrigin.x)
+                    {
+                        entityPhysics.velocity = new Vector2(correctionSpeed, entityPhysics.velocity.y);
                     }
                 }
 
@@ -135,7 +147,9 @@ public class RunnerPlayerController : MonoBehaviour
 
         if (other.gameObject.tag == "Spike")
         {
-            InGameUIManager.Instance.EndGame();
+            entity.GetComponentInChildren<MeshRenderer>().enabled = false;
+            explosionParticle.Play();
+            isAlive = false;
         }
     }
 
@@ -153,7 +167,14 @@ public class RunnerPlayerController : MonoBehaviour
 
     private void HandleTrail()
     {
-        trail.SetActive(true);
+        if (isAlive)
+        {
+            trail.emissionRate = 10;
+        }
+        else
+        {
+            trail.emissionRate = 0;
+        }
 
         if (!crouching)
         {
