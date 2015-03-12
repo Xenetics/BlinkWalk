@@ -1,0 +1,185 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Xml;
+using System.Net;
+using System.IO;
+
+public struct ChallengeData
+{
+    public int challengeNumber;
+    public int width;
+    public int height;
+    public int tileCount;
+    public char[] layout;
+}
+
+public class LevelManager : MonoBehaviour 
+{
+    private static LevelManager instance = null;
+    public static LevelManager Instance { get { return instance; } }
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+
+        string textData = new WWW("http://triosdevelopers.com/R.OConnor/impairedLevelData/ChallengeData.xml").text;
+        ParseXML(textData);
+    }
+
+    [SerializeField]
+    private TextAsset levelXML;
+
+    public ChallengeData[] challenges;
+
+    public int totalLevels { get; set; }
+
+    [SerializeField]
+    private GameObject[] objects;
+
+    public void BuildLevel(int challenge)
+    {
+        GameObject levelContainer = new GameObject();
+        levelContainer.transform.position = Vector3.zero;
+
+        Vector2 startPoint = new Vector2(-challenges[challenge].width * 0.5f, -challenges[challenge].height * 0.5f);
+        Vector2 currentSpawn = new Vector2(startPoint.x, startPoint.y);
+
+        for(int i = 0; i < challenges[challenge].tileCount ; i++)
+        {
+            if (challenges[challenge].layout[i] != 'e')
+            {
+                GameObject item = AddItem(challenges[challenge].layout[i]);
+                item.transform.position = currentSpawn;
+                item.transform.parent = levelContainer.transform;
+            }
+            currentSpawn = incrementSpawn(challenge, startPoint, currentSpawn);
+        }
+    }
+
+    private GameObject AddItem(char item)
+    {
+        GameObject newObject;
+        switch(item)
+        {
+            case 'S':
+                for(int i = 0; i < objects.Length; i++)
+                {
+                    if(objects[i].name == "PlatformPlayer")
+                    {
+                        newObject = Instantiate(objects[i]);
+                        newObject.name = objects[i].name;
+                        return newObject;
+                    }
+                }
+                break;
+            case 'E':
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    if (objects[i].name == "EndZone")
+                    {
+                        newObject = Instantiate(objects[i]);
+                        newObject.name = objects[i].name;
+                        return newObject;
+                    }
+                }
+                break;
+            case 'b':
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    if (objects[i].name == "Block")
+                    {
+                        newObject = Instantiate(objects[i]);
+                        newObject.name = objects[i].name;
+                        return newObject;
+                    }
+                }
+                break;
+            case 's':
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    if (objects[i].name == "Spike")
+                    {
+                        newObject = Instantiate(objects[i]);
+                        newObject.name = objects[i].name;
+                        return newObject;
+                    }
+                }
+                break;
+            case 'B':
+                for (int i = 0; i < objects.Length; i++)
+                {
+                    if (objects[i].name == "Button")
+                    {
+                        newObject = Instantiate(objects[i]);
+                        newObject.name = objects[i].name;
+                        return newObject;
+                    }
+                }
+                break;
+        }
+        return new GameObject();
+    }
+
+    private Vector2 incrementSpawn(int challenge, Vector2 startPoint, Vector2 oldspawn)
+    {
+        if (oldspawn.x < (startPoint.x + challenges[challenge].width))
+        {
+            return new Vector2(oldspawn.x + 1, oldspawn.y);
+        }
+        else if (oldspawn.y < (startPoint.y + challenges[challenge].height))
+        {
+            return new Vector2(startPoint.x, oldspawn.y + 1);
+        }
+        return new Vector2();
+    }
+
+    private void ParseXML(string xml) // parses the data out of the Xml
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(new StringReader(xml));
+        string xmlPathPattern = "//challenges/challenge";
+        XmlNodeList myNodeList = doc.SelectNodes(xmlPathPattern);
+
+        challenges = new ChallengeData[myNodeList.Count];
+        totalLevels = myNodeList.Count;
+        int count = 0;
+        foreach (XmlNode node in myNodeList)
+        {
+            challenges[count] = ParseNode(node);
+            count++;
+        }
+    }
+
+    private ChallengeData ParseNode(XmlNode node) // creates a level out of a node
+    {
+        XmlNode nameNode = node.FirstChild;
+        XmlNode widthNode = nameNode.NextSibling;
+        XmlNode heightNode = widthNode.NextSibling;
+        XmlNode layoutNode = heightNode.NextSibling;
+
+        ChallengeData temp = new ChallengeData();
+
+        temp.challengeNumber = int.Parse(nameNode.InnerXml);
+        temp.width = widthNode.InnerXml.Length;
+        temp.height = heightNode.InnerXml.Length;
+        temp.tileCount = temp.width * temp.height;
+        temp.layout = new char[temp.tileCount];
+
+        int count = 0;
+        foreach (char tile in layoutNode.InnerXml)
+        {
+            temp.layout[count] = layoutNode.InnerXml[count];
+            count++;
+        }
+
+        return temp;
+    }
+}
