@@ -30,8 +30,7 @@ public class LevelManager : MonoBehaviour
             instance = this;
         }
 
-        string textData = new WWW("http://triosdevelopers.com/R.OConnor/impairedLevelData/ChallengeData.xml").text;
-        ParseXML(textData);
+        StartCoroutine("LoadXML");   
     }
 
     [SerializeField]
@@ -47,9 +46,10 @@ public class LevelManager : MonoBehaviour
     public void BuildLevel(int challenge)
     {
         GameObject levelContainer = new GameObject();
+        levelContainer.name = "levelContainer";
         levelContainer.transform.position = Vector3.zero;
 
-        Vector2 startPoint = new Vector2(-challenges[challenge].width * 0.5f, -challenges[challenge].height * 0.5f);
+        Vector2 startPoint = new Vector2(0, 0);
         Vector2 currentSpawn = new Vector2(startPoint.x, startPoint.y);
 
         for(int i = 0; i < challenges[challenge].tileCount ; i++)
@@ -128,17 +128,28 @@ public class LevelManager : MonoBehaviour
         return new GameObject();
     }
 
-    private Vector2 incrementSpawn(int challenge, Vector2 startPoint, Vector2 oldspawn)
+    private Vector2 incrementSpawn(int challenge, Vector2 startPoint, Vector2 oldspawn) // incraments the point at which to put the next object
     {
-        if (oldspawn.x < (startPoint.x + challenges[challenge].width))
+        if (oldspawn.x == challenges[challenge].width - 1)
         {
-            return new Vector2(oldspawn.x + 1, oldspawn.y);
+            return new Vector2(startPoint.x, oldspawn.y - 1);
         }
-        else if (oldspawn.y < (startPoint.y + challenges[challenge].height))
+        else
         {
-            return new Vector2(startPoint.x, oldspawn.y + 1);
+            return new Vector2(oldspawn.x += 1, oldspawn.y);
         }
-        return new Vector2();
+    }
+
+    // XML Parsing Section
+
+    private IEnumerator LoadXML() // Starts the XML loading from the web and starts parse when complete
+    {
+        WWW ChallengeXML = new WWW("http://triosdevelopers.com/R.OConnor/impairedLevelData/ChallengeData.xml");
+
+        yield return ChallengeXML;
+
+        ParseXML(ChallengeXML.text);
+        Debug.Log("Parse Complete");
     }
 
     private void ParseXML(string xml) // parses the data out of the Xml
@@ -168,9 +179,9 @@ public class LevelManager : MonoBehaviour
         ChallengeData temp = new ChallengeData();
 
         temp.challengeNumber = int.Parse(nameNode.InnerXml);
-        temp.width = widthNode.InnerXml.Length;
-        temp.height = heightNode.InnerXml.Length;
-        temp.tileCount = temp.width * temp.height;
+        temp.width = int.Parse(widthNode.InnerXml);
+        temp.height = int.Parse(heightNode.InnerXml);
+        temp.tileCount = layoutNode.InnerXml.Length;
         temp.layout = new char[temp.tileCount];
 
         int count = 0;
