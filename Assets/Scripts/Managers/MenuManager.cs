@@ -7,7 +7,7 @@ using System.Collections;
 
 public class MenuManager : MonoBehaviour 
 {
-    private float transitionSpeed = 1.0f;
+    private float transitionSpeed = 2.0f;
     private bool transitioning = false;
     private bool transitioningIn = true;
 

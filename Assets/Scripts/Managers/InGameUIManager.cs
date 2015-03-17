@@ -27,7 +27,7 @@ public class InGameUIManager : MonoBehaviour
     private Canvas UICanvas;
     [SerializeField]
     private Image transitionLayer;
-    private float transitionSpeed = 1.0f;
+    private float transitionSpeed = 5.0f;
     private bool transitioning = false;
     private bool transitioningIn = true;
     [SerializeField]
