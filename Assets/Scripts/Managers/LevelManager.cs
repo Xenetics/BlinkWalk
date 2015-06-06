@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Net;
 using System.IO;
 
@@ -74,7 +76,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if(objects[i].name == "PlatformPlayer")
                     {
-                        newObject = Instantiate(objects[i]);
+                        newObject = Instantiate(objects[i]) as GameObject;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -85,7 +87,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "EndZone")
                     {
-                        newObject = Instantiate(objects[i]);
+                        newObject = Instantiate(objects[i]) as GameObject; ;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -96,7 +98,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "Block")
                     {
-                        newObject = Instantiate(objects[i]);
+                        newObject = Instantiate(objects[i]) as GameObject; ;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -107,7 +109,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "Spike")
                     {
-                        newObject = Instantiate(objects[i]);
+                        newObject = Instantiate(objects[i]) as GameObject; ;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -118,7 +120,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "Button")
                     {
-                        newObject = Instantiate(objects[i]);
+                        newObject = Instantiate(objects[i]) as GameObject; ;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -154,6 +156,9 @@ public class LevelManager : MonoBehaviour
 
     private void ParseXML(string xml) // parses the data out of the Xml
     {
+        //XDocument doc = new XDocument(XDocument.Load(new StringReader(xml))); // Maybe a solution but maybe now
+
+        /*
         XmlDocument doc = new XmlDocument();
         doc.Load(new StringReader(xml));
         string xmlPathPattern = "//challenges/challenge";
@@ -167,6 +172,7 @@ public class LevelManager : MonoBehaviour
             challenges[count] = ParseNode(node);
             count++;
         }
+        */ 
     }
 
     private ChallengeData ParseNode(XmlNode node) // creates a level out of a node

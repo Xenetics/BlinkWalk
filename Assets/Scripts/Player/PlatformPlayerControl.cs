@@ -20,17 +20,18 @@ public class PlatformPlayerControl : MonoBehaviour
     [SerializeField]
     private float jumpForce = 1;
     private bool isAlive = true;
+    [SerializeField]
     private bool grounded = true;
+    [SerializeField]
     private bool walledLeft = false;
+    [SerializeField]
     private bool walledRight = false;
 
+    [SerializeField]
     private bool crouching = false;
     [SerializeField]
     private float crouchtime = 1.5f;
     private float crouchTimer;
-
-    private float botOutOfScreen = -12f;
-    private float leftOutOfScreen = -19f;
 
     private static PlatformPlayerControl instance = null;
     public static PlatformPlayerControl Instance { get { return instance; } }
@@ -128,7 +129,7 @@ public class PlatformPlayerControl : MonoBehaviour
                 grounded = true;
             }
 
-            if(Vector2.Dot(contact.normal, -Vector2.right) > 0.5)
+            if(Vector2.Dot(contact.normal, -Vector2.right) > 0.5 && !grounded)
             {
                 walledRight = true;
             }
@@ -137,7 +138,7 @@ public class PlatformPlayerControl : MonoBehaviour
                 walledRight = false;
             }
 
-            if (Vector2.Dot(contact.normal, Vector2.right) > 0.5)
+            if (Vector2.Dot(contact.normal, Vector2.right) > 0.5 && !grounded)
             {
                 walledLeft = true;
             }

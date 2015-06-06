@@ -7,7 +7,7 @@ public class StateGameMenu : GameState
 
     public override void OnStateEntered() 
     {
-        Cursor.visible = true;
+        
     }
     public override void OnStateExit() 
     {

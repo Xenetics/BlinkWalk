@@ -71,7 +71,7 @@ public class RunnerPlayerController : MonoBehaviour
             {
                 if (grounded)
                 {
-                    if (Input.GetButtonDown("Jump"))
+                    if (Input.GetButtonDown("Jump") || Input.touchCount == 1)
                     {
                         entityPhysics.AddForce(new Vector2(0, jumpForce));
                         grounded = false;
@@ -83,7 +83,7 @@ public class RunnerPlayerController : MonoBehaviour
                     }
                 }
 
-                if (Input.GetButtonDown("Crouch"))
+                if (Input.GetButtonDown("Crouch") || Input.touchCount == 2)
                 {
                     crouching = true;
                 }

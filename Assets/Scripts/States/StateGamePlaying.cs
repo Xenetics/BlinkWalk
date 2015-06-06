@@ -9,7 +9,7 @@ public class StateGamePlaying : GameState
 	
 	public override void OnStateEntered()
     {
-        Cursor.visible = false;
+        
     }
 
 	public override void OnStateExit()

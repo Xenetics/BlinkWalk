@@ -8,7 +8,7 @@ public class StateGameWon : GameState
 
 	public override void OnStateEntered()
     {
-        Cursor.visible = true;
+        
     }
 	public override void OnStateExit()
     {
