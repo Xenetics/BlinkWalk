@@ -85,7 +85,6 @@ public class MenuManager : MonoBehaviour
     {
         if (button == "play")
         {
-            GameManager.Instance.NewGameState(GameManager.Instance.stateGamePlaying);
             Application.LoadLevel("game");
         }
         else if(button == "challenges")

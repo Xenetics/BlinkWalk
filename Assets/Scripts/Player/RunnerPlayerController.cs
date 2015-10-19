@@ -11,8 +11,7 @@ public class RunnerPlayerController : MonoBehaviour
     private Rigidbody2D entityPhysics;
     [SerializeField]
     private ParticleSystem trail;
-    [SerializeField]
-    private ParticleSystemRenderer particleTexture;
+    public ParticleSystemRenderer particleTexture;
     [SerializeField]
     private Material upRightParticle;
     [SerializeField]

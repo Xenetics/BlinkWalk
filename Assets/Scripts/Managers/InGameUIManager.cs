@@ -27,9 +27,9 @@ public class InGameUIManager : MonoBehaviour
     private Canvas UICanvas;
     [SerializeField]
     private Image transitionLayer;
-    private float transitionSpeed = 5.0f;
+    private float transitionSpeed = 1.0f;
     private bool transitioning = false;
-    private bool transitioningIn = true;
+    private bool transitioningIn = false;
     [SerializeField]
     private Image visionBar;
     private float maxBarLength;
@@ -50,12 +50,13 @@ public class InGameUIManager : MonoBehaviour
     private Image InstructionImage;
     private bool tutDone = false;
 
-	void Start () 
+	void Start() 
     {
-
-	}
+        transitionLayer.color = new Color(1, 1, 1, 1);
+        transitioningIn = true;
+    }
 	
-	void Update () 
+	void Update() 
     {
         Transitions();
 
@@ -75,9 +76,8 @@ public class InGameUIManager : MonoBehaviour
         {
             if (GameManager.WhatState() == "playing")
             {
-                
+                Timer();
             }
-            Timer(); // move into the above IF
             VisionBar();
         }
 	}
@@ -209,9 +209,11 @@ public class InGameUIManager : MonoBehaviour
         {
             transitionLayer.color = Color.Lerp(transitionLayer.color, new Color(0.0f, 0.0f, 0.0f, 0.0f), Time.deltaTime * transitionSpeed);
 
-            if (Vector4.Distance(transitionLayer.color, new Color(0.0f, 0.0f, 0.0f, 0.0f)) < 0.05f)
+            if (Vector4.Distance(transitionLayer.color, new Color(0.0f, 0.0f, 0.0f, 0.0f)) < 0.10f)
             {
                 transitionLayer.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+                GameManager.Instance.NewGameState(GameManager.Instance.stateGamePlaying);
+                RunnerPlayerController.Instance.particleTexture.gameObject.SetActive(true);
                 transitioningIn = false;
             }
         }

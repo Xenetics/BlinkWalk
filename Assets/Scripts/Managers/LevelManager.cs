@@ -6,6 +6,12 @@ using System.Xml.Linq;
 using System.Net;
 using System.IO;
 
+#if NETFX_CORE
+using XmlReader = WinRTLegacy.Xml.XmlReader;
+#else
+using XmlReader = System.Xml.XmlReader;
+#endif
+
 public struct ChallengeData
 {
     public int challengeNumber;
@@ -87,7 +93,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "EndZone")
                     {
-                        newObject = Instantiate(objects[i]) as GameObject; ;
+                        newObject = Instantiate(objects[i]) as GameObject;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -98,7 +104,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "Block")
                     {
-                        newObject = Instantiate(objects[i]) as GameObject; ;
+                        newObject = Instantiate(objects[i]) as GameObject;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -109,7 +115,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "Spike")
                     {
-                        newObject = Instantiate(objects[i]) as GameObject; ;
+                        newObject = Instantiate(objects[i]) as GameObject;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -120,7 +126,7 @@ public class LevelManager : MonoBehaviour
                 {
                     if (objects[i].name == "Button")
                     {
-                        newObject = Instantiate(objects[i]) as GameObject; ;
+                        newObject = Instantiate(objects[i]) as GameObject;
                         newObject.name = objects[i].name;
                         return newObject;
                     }
@@ -158,7 +164,7 @@ public class LevelManager : MonoBehaviour
     {
         //XDocument doc = new XDocument(XDocument.Load(new StringReader(xml))); // Maybe a solution but maybe now
 
-        /*
+
         XmlDocument doc = new XmlDocument();
         doc.Load(new StringReader(xml));
         string xmlPathPattern = "//challenges/challenge";
@@ -172,7 +178,7 @@ public class LevelManager : MonoBehaviour
             challenges[count] = ParseNode(node);
             count++;
         }
-        */ 
+
     }
 
     private ChallengeData ParseNode(XmlNode node) // creates a level out of a node
