@@ -7,11 +7,6 @@ public class FadeCompany : MonoBehaviour
     private SpriteRenderer pic;
     private float fadeSpeed = 0.3f;
 
-	void Start () 
-    {
-	
-	}
-	
 	void Update () 
     {
         pic.color = Color.Lerp(pic.color, Color.white, fadeSpeed * Time.deltaTime);

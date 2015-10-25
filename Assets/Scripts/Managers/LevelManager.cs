@@ -164,7 +164,6 @@ public class LevelManager : MonoBehaviour
     {
         //XDocument doc = new XDocument(XDocument.Load(new StringReader(xml))); // Maybe a solution but maybe now
 
-
         XmlDocument doc = new XmlDocument();
         doc.Load(new StringReader(xml));
         string xmlPathPattern = "//challenges/challenge";
@@ -202,7 +201,6 @@ public class LevelManager : MonoBehaviour
             temp.layout[count] = layoutNode.InnerXml[count];
             count++;
         }
-
         return temp;
     }
 }

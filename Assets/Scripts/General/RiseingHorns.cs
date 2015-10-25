@@ -5,10 +5,6 @@ public class RiseingHorns : MonoBehaviour
 {
     public float speed = 2.0f;
     public float hornHeight = -0.5f;
-	void Start () 
-    {
-	
-	}
 
 	void Update () 
     {
