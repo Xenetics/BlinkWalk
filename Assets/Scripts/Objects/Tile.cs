@@ -7,28 +7,26 @@ using System.Collections;
 /// </summary>
 public class Tile : MonoBehaviour
 {
-    /// <summary>  </summary>
-    public enum TileType { Empty, Block, Spike, Start, End }
-    /// <summary>  </summary>
+    /// <summary> Enum for types of tiles to use in the switch </summary>
+    public enum TileType { Empty, Block, Spike, Start, End, COUNT }
+    /// <summary> Current Tile type </summary>
     [SerializeField]
     private TileType m_CurrentType = TileType.Empty;
-    /// <summary>  </summary>
+    /// <summary> Block Tile object </summary>
     [SerializeField]
     private GameObject m_Block;
-    /// <summary>  </summary>
+    /// <summary> Spike Tile object </summary>
     [SerializeField]
     private GameObject m_Spike;
-    /// <summary>  </summary>
+    /// <summary> Start Tile object </summary>
     [SerializeField]
     private GameObject m_Start;
-    /// <summary>  </summary>
+    /// <summary> End Tile object </summary>
     [SerializeField]
     private GameObject m_End;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="newType"></param>
+    /// <summary> Builds the Tile Grid </summary>
+    /// <param name="newType"> The tile type you would like to make </param>
     public void SetTile(TileType newType)
     {
         SanatizeTile();

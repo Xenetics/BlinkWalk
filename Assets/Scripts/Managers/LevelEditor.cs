@@ -9,6 +9,7 @@ using System.Collections.Generic;
 public class LevelEditor : Singleton<LevelEditor>
 {
     protected LevelEditor() { }
+
     /// <summary> Width of editing area </summary>
     [SerializeField]
     private int m_Width;
@@ -20,7 +21,8 @@ public class LevelEditor : Singleton<LevelEditor>
     private GameObject m_Prefab;
     /// <summary> List of tile objects </summary>
     private List<GameObject> m_Tiles;
-
+    /// <summary> Selected Tile object </summary>
+    public Tile SelectedTile;
 
 	void Start ()
     {

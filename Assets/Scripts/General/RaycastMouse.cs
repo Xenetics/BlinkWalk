@@ -1,56 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
-public class RaycastMouse : MonoBehaviour 
+/// <summary>
+/// Created -> 10/25/15
+/// Raycast mouse pointer for selection
+/// </summary>
+public class RaycastMouse : Singleton<RaycastMouse> 
 {
-	public Texture2D iconArrow;
-	public Vector2 arrowRegPoint;
-	public Texture2D iconClick;
-	public Vector2 clickRegPoint;
-	private Vector2 mouseReg;
-	private Vector2 mouseCoord;
-	private Texture mouseTex;
+    protected RaycastMouse() { }
 
-    public Camera cam;
-	
-	void OnDisable()
-	{
-		
-	}
-	
+    /// <summary> Mouse Coordinates on click </summary>
+	private Vector2 mouseCoord;
+    /// <summary> Ui Popup for the tile Selection </summary>
+    [SerializeField]
+    private GameObject m_Popup;
+
     void Update () 
 	{
-		
-	}
-
-    void OnGUI()
-    {
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && LevelEditor.Instance.SelectedTile == null)
         {
-            //determine what we hit.
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
                 switch (hit.collider.tag)
                 {
                     case "Tile":
-                        //mouseTex = iconClick;
-                        //mouseReg = clickRegPoint;
-                        Debug.Log("Yarrr we gots a Tile Matey!");
+                        LevelEditor.Instance.SelectedTile = hit.collider.gameObject.GetComponent<Tile>();
+                        mouseCoord = Input.mousePosition;
+                        m_Popup.transform.position = new Vector3(mouseCoord.x, mouseCoord.y, m_Popup.transform.position.z);
+                        m_Popup.SetActive(true);
                         break;
                 }
             }
-            else
-            {
-                //mouseTex = iconArrow;
-                //mouseReg = arrowRegPoint;
-            }
-
-            //GUI.depth = 0;
-            //update texture object.
-            //mouseCoord = Input.mousePosition;
-            //GUI.DrawTexture( new Rect(mouseCoord.x-mouseReg.x, Screen.height-mouseCoord.y - mouseReg.y, mouseTex.width, mouseTex.height), mouseTex, ScaleMode.StretchToFill, true, 10.0f);
         }
     }
 } 
