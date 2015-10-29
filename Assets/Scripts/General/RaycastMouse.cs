@@ -11,14 +11,18 @@ public class RaycastMouse : Singleton<RaycastMouse>
     protected RaycastMouse() { }
 
     /// <summary> Mouse Coordinates on click </summary>
-	private Vector2 mouseCoord;
+	private Vector2 m_MouseCoord;
     /// <summary> Ui Popup for the tile Selection </summary>
     [SerializeField]
     private GameObject m_Popup;
+    /// <summary> Speed at which the Camera will move </summary>
+    [SerializeField]
+    private float m_CamSpeed = 0.5f;
 
     void Update () 
 	{
-        if (Input.GetMouseButtonUp(0) && LevelEditor.Instance.SelectedTile == null)
+        m_MouseCoord = Input.mousePosition;
+        if (Input.GetMouseButtonDown(0) && LevelEditor.Instance.SelectedTile == null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -28,12 +32,17 @@ public class RaycastMouse : Singleton<RaycastMouse>
                 {
                     case "Tile":
                         LevelEditor.Instance.SelectedTile = hit.collider.gameObject.GetComponent<Tile>();
-                        mouseCoord = Input.mousePosition;
-                        m_Popup.transform.position = new Vector3(mouseCoord.x, mouseCoord.y, m_Popup.transform.position.z);
+                        m_Popup.transform.position = new Vector3(m_MouseCoord.x, m_MouseCoord.y, m_Popup.transform.position.z);
                         m_Popup.SetActive(true);
                         break;
                 }
             }
+        }
+
+        if (Vector2.Distance(Camera.main.transform.position, Camera.main.ScreenToWorldPoint(m_MouseCoord)) > Camera.main.orthographicSize)
+        {
+            Vector2 newPos = Camera.main.ScreenToWorldPoint(m_MouseCoord);
+            Camera.main.transform.position =  Vector3.Lerp(Camera.main.transform.position, new Vector3(newPos.x, newPos.y, Camera.main.transform.position.z), 0.5f * Time.deltaTime);
         }
     }
 } 

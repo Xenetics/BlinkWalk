@@ -22,6 +22,7 @@ public class LevelEditor : Singleton<LevelEditor>
     /// <summary> List of tile objects </summary>
     private List<GameObject> m_Tiles;
     /// <summary> Selected Tile object </summary>
+    [HideInInspector]
     public Tile SelectedTile;
 
 	void Start ()
