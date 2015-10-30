@@ -18,11 +18,13 @@ public class RaycastMouse : Singleton<RaycastMouse>
     /// <summary> Speed at which the Camera will move </summary>
     [SerializeField]
     private float m_CamSpeed = 0.5f;
+    [HideInInspector]
+    public bool Busy = false;
 
     void Update () 
 	{
         m_MouseCoord = Input.mousePosition;
-        if (Input.GetMouseButtonDown(0) && LevelEditor.Instance.SelectedTile == null)
+        if (Input.GetMouseButtonDown(0) && Busy == false)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -34,6 +36,7 @@ public class RaycastMouse : Singleton<RaycastMouse>
                         LevelEditor.Instance.SelectedTile = hit.collider.gameObject.GetComponent<Tile>();
                         m_Popup.transform.position = new Vector3(m_MouseCoord.x, m_MouseCoord.y, m_Popup.transform.position.z);
                         m_Popup.SetActive(true);
+                        Busy = true;
                         break;
                 }
             }

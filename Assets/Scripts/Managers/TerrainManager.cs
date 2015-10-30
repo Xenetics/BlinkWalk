@@ -2,23 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TerrainManager : MonoBehaviour 
+public class TerrainManager : Singleton<TerrainManager> 
 {
-    public static TerrainManager Instance { get { return instance; } }
-    private static TerrainManager instance = null;
-
-    void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        else
-        {
-            instance = this;
-        }
-    }
+    protected TerrainManager() { }
 
     [SerializeField]
     private GameObject collectable;

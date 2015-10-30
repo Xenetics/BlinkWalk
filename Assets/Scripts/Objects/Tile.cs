@@ -12,6 +12,9 @@ public class Tile : MonoBehaviour
     /// <summary> Current Tile type </summary>
     [SerializeField]
     private TileType m_CurrentType = TileType.Empty;
+    /// <summary> Empty Tile Object </summary>
+    [SerializeField]
+    private GameObject m_Empty;
     /// <summary> Block Tile object </summary>
     [SerializeField]
     private GameObject m_Block;
@@ -33,7 +36,7 @@ public class Tile : MonoBehaviour
         switch (newType)
         {
             case TileType.Empty:
-                
+
                 break;
             case TileType.Block:
                 m_Block.SetActive(true);

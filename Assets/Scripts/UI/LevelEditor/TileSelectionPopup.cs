@@ -25,6 +25,8 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
     private float m_SpacingPercent = 0.05f;
     /// <summary> Spacing between list objects </summary>
     private float m_Spacing;
+    /// <summary> ScrollBar for the list </summary>
+    public Scrollbar ScrollBar;
 
     void Start()
     {
@@ -68,6 +70,7 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
 
             temp.GetComponent<TileListObject>().Tiletype = (Tile.TileType)i;
             temp.GetComponent<TileListObject>().Title.text = temp.GetComponent<TileListObject>().Tiletype.ToString();
+            temp.GetComponent<TileListObject>().ListPopup = gameObject;
             m_ListObjects.Add(temp);
         }
     }
@@ -76,5 +79,6 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
     {
         gameObject.SetActive(false);
         LevelEditor.Instance.SelectedTile = null;
+        RaycastMouse.Instance.Busy = false;
     }
 }

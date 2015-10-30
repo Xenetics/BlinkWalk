@@ -2,38 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AudioManager : MonoBehaviour 
+public class AudioManager : Singleton<AudioManager> 
 {
-	private static AudioManager instance = null;
-	public static AudioManager Instance { get { return instance; } }
-	
-	void Awake()
-	{
-		DontDestroyOnLoad(this.gameObject);
-		if(instance != null && instance != this)
-		{
-			Destroy (this.gameObject);
-			return;
-		}
-		else
-		{
-			instance = this;
-		}
+	protected AudioManager() { }
 
-        musicOn = true;
-        soundOn = true;
-	}
-
-    public GameObject[] MusicPlayer; // maked this an array to use multiple musics so its a more general sound manager.
-    private GameObject[] Musics;
-    public AudioClip[] Sounds;
+    [SerializeField]
+    private List<GameObject> m_MusicPlayer; // maked this an array to use multiple musics so its a more general sound manager.
+    [SerializeField]
+    private List<AudioClip> m_Sounds;
     public bool musicOn { get; set; }
     public bool soundOn { get; set; }
-     
-	void Start () 
+
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+        musicOn = true;
+        soundOn = true;
+    }
+
+    void Start () 
 	{
-        Musics = new GameObject[MusicPlayer.Length];
-        FillMusics();
+        m_MusicPlayer = new List<GameObject>();
+        m_Sounds = new List<AudioClip>();
 	}
 	
 	void Update () 
@@ -48,49 +38,37 @@ public class AudioManager : MonoBehaviour
 
 	public void PlaySound(string toPlay)
 	{
-        for(int i = 0; i < Sounds.Length; ++i)
+        for(int i = 0; i < m_Sounds.Count; ++i)
         {
-            if(soundOn && toPlay == Sounds[i].name)
+            if(soundOn && toPlay == m_Sounds[i].name)
             {
-                AudioSource.PlayClipAtPoint(Sounds[i], Camera.main.transform.position);
+                AudioSource.PlayClipAtPoint(m_Sounds[i], Camera.main.transform.position);
             }
         }
 	}
 
     private void ApplyMute()
     {
-        for(int i = 0; i < Musics.Length; ++i)
+        for(int i = 0; i < m_MusicPlayer.Count; ++i)
         {
             string tempName = Application.loadedLevelName;
-            if (musicOn && tempName == Musics[i].gameObject.name)
+            if (musicOn && tempName == m_MusicPlayer[i].gameObject.name)
             {
-                Musics[i].GetComponent<AudioSource>().mute = false;
-                if (!Musics[i].GetComponent<AudioSource>().isPlaying)
+                m_MusicPlayer[i].GetComponent<AudioSource>().mute = false;
+                if (!m_MusicPlayer[i].GetComponent<AudioSource>().isPlaying)
                 {
-                    Musics[i].GetComponent<AudioSource>().Play();
+                    m_MusicPlayer[i].GetComponent<AudioSource>().Play();
                 }
             }
             else
             {
-                Musics[i].transform.parent = gameObject.transform;
-                Musics[i].GetComponent<AudioSource>().mute = true;
-                if (Musics[i].GetComponent<AudioSource>().isPlaying)
+                m_MusicPlayer[i].transform.parent = gameObject.transform;
+                m_MusicPlayer[i].GetComponent<AudioSource>().mute = true;
+                if (m_MusicPlayer[i].GetComponent<AudioSource>().isPlaying)
                 {
-                    Musics[i].GetComponent<AudioSource>().Stop();
+                    m_MusicPlayer[i].GetComponent<AudioSource>().Stop();
                 }
             }
-        }
-    }
-    
-    private void FillMusics()
-    {
-        for(int i = 0; i < MusicPlayer .Length; ++i)
-        {
-            GameObject add = (GameObject)Instantiate(MusicPlayer[i], Camera.main.transform.position, Quaternion.identity);
-            add.name = MusicPlayer[i].name;
-            Musics[i] = add;
-            Musics[i].transform.parent = gameObject.transform;
-            Musics[i].GetComponent<AudioSource>().mute = true;
         }
     }
     

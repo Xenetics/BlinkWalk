@@ -5,8 +5,10 @@ using System.Collections;
 
 // Used for all Main menu functionality and interaction with the game manager
 
-public class MenuManager : MonoBehaviour 
+public class MenuManager : Singleton<MenuManager> 
 {
+    protected MenuManager() { }
+
     private float transitionSpeed = 2.0f;
     private bool transitioning = false;
     private bool transitioningIn = true;

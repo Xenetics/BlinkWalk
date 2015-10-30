@@ -2,22 +2,12 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class InGameUIManager : MonoBehaviour 
+public class InGameUIManager : Singleton<InGameUIManager> 
 {
-    private static InGameUIManager instance = null;
-    public static InGameUIManager Instance { get { return instance; } }
+    protected InGameUIManager() { }
 
     void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        else
-        {
-            instance = this;
-        }
         maxBarLength = visionBar.rectTransform.sizeDelta.x;
         originalBarPos = visionBar.rectTransform.localPosition.x;
     }
