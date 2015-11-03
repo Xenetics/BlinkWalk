@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 /// <summary>
 /// Created -> 10/25/15
@@ -10,6 +11,12 @@ public class LevelEditor : Singleton<LevelEditor>
 {
     protected LevelEditor() { }
 
+    /// <summary> UI object for the import file name input </summary>
+    [SerializeField]
+    private InputField m_ImportInput;
+    /// <summary> UI object for the export file name input </summary>
+    [SerializeField]
+    private InputField m_ExportInput;
     /// <summary> Width of editing area </summary>
     [SerializeField]
     private int m_Width;
@@ -53,7 +60,12 @@ public class LevelEditor : Singleton<LevelEditor>
         }
     }
 
-    public void ExportButtom()
+    public void Export()
+    {
+
+    }
+
+    public void Import()
     {
 
     }
