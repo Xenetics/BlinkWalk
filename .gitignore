@@ -19,6 +19,7 @@ sysinfo.txt
 /*.user
 /*.unityproj
 /*.booproj
+packages/
 /Assets/UnityVS/*
 /Assets/UnityVS.meta
  

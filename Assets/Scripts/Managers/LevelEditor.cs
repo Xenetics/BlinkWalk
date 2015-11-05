@@ -38,12 +38,6 @@ public class LevelEditor : Singleton<LevelEditor>
         BuildTiles();   
     }
 	
-
-	void Update ()
-    {
-	    
-	}
-
     /// <summary> Builds the tile grid a column at a time </summary>
     private void BuildTiles()
     {
@@ -60,13 +54,18 @@ public class LevelEditor : Singleton<LevelEditor>
         }
     }
 
+    /// <summary>  </summary>
     public void Export()
     {
-        // Parse to file and upload to azure
+        // Build string / File
+        // Call to azure helper
     }
 
+    /// <summary>  </summary>
     public void Import()
     {
-        // Call to azure dll and pass in input
+        // use input to call into azure
+        // decode string / File
+        // build level
     }
 }

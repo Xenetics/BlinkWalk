@@ -34,6 +34,7 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
         BuildList();
     }
 
+    /// <summary>  </summary>
     private void BuildList()
     {
         m_Spacing = (int)Tile.TileType.COUNT * (m_ListPrefab.GetComponent<RectTransform>().sizeDelta.y) * m_SpacingPercent;
@@ -75,6 +76,7 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
         }
     }
 
+    /// <summary>  </summary>
     public void Close()
     {
         gameObject.SetActive(false);
