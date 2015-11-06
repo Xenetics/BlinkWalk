@@ -1,0 +1,38 @@
+﻿Build started 11/6/2015 12:06:17 AM.
+     1>Project "C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\FileStore\FileStore.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /IC:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\packages\wastorage.v120.2.1.0\build\native\include /I"C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\packages\cpprestsdk.v120.windesktop.msvcstl.dyn.rt-dyn.2.6.0\build\native\include" /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D FILESTORE_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt FileStore.cpp
+         FileStore.cpp
+     1>FileStore.cpp(8): warning C4273: 'Connect' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(19) : see previous definition of 'Connect'
+     1>FileStore.cpp(28): warning C4273: 'FolderCreate' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(22) : see previous definition of 'FolderCreate'
+     1>FileStore.cpp(43): warning C4273: 'FolderDelete' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(25) : see previous definition of 'FolderDelete'
+     1>FileStore.cpp(57): warning C4273: 'FolderList' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(28) : see previous definition of 'FolderList'
+     1>FileStore.cpp(78): warning C4244: '=' : conversion from 'const wchar_t' to 'char', possible loss of data
+     1>FileStore.cpp(95): warning C4273: 'FileCreate' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(31) : see previous definition of 'FileCreate'
+     1>FileStore.cpp(111): warning C4273: 'FileDelete' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(34) : see previous definition of 'FileDelete'
+     1>FileStore.cpp(126): warning C4273: 'FileList' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(37) : see previous definition of 'FileList'
+     1>FileStore.cpp(149): warning C4244: '=' : conversion from 'wchar_t' to 'char', possible loss of data
+     1>FileStore.cpp(165): warning C4273: 'FileRetrieve' : inconsistent dll linkage
+                 c:\users\rory\documents\github\blinkwalk\filestore\filestore\FileStore.h(40) : see previous definition of 'FileRetrieve'
+     1>FileStore.cpp(177): warning C4244: '=' : conversion from 'wchar_t' to 'char', possible loss of data
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\x64\Release\FileStore.dll" /INCREMENTAL:NO /NOLOGO C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\packages\wastorage.v120.2.1.0\build\native\..\..\lib\native\v120\x64\Release\wastorage.lib "C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\packages\cpprestsdk.v120.windesktop.msvcstl.dyn.rt-dyn.2.6.0\build\native\..\..\lib\native\v120\windesktop\msvcstl\dyn\rt-dyn\x64\Release\cpprest120_2_6.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\x64\Release\FileStore.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\x64\Release\FileStore.lib" /MACHINE:X64 /DLL x64\Release\FileStore.obj
+            Creating library C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\x64\Release\FileStore.lib and object C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\x64\Release\FileStore.exp
+         Generating code
+     1>c:\users\rory\documents\github\blinkwalk\filestore\filestore\filestore.cpp(54): warning C4715: 'FolderDelete' : not all control paths return a value
+     1>c:\users\rory\documents\github\blinkwalk\filestore\filestore\filestore.cpp(123): warning C4715: 'FileDelete' : not all control paths return a value
+     1>c:\users\rory\documents\github\blinkwalk\filestore\filestore\filestore.cpp(162): warning C4715: 'FileList' : not all control paths return a value
+         Finished generating code
+         FileStore.vcxproj -> C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\x64\Release\FileStore.dll
+     1>Done Building Project "C:\Users\rory\Documents\GitHub\BlinkWalk\FileStore\FileStore\FileStore.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:12.86

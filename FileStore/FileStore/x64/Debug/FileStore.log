@@ -1,0 +1,32 @@
+﻿Build started 11/5/2015 11:58:53 PM.
+     1>Project "c:\Users\rory\documents\visual studio 2013\Projects\FileStore\FileStore\FileStore.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"c:\Users\rory\documents\visual studio 2013\Projects\FileStore\packages\wastorage.v120.2.1.0\build\native\include" /I"c:\Users\rory\documents\visual studio 2013\Projects\FileStore\packages\cpprestsdk.v120.windesktop.msvcstl.dyn.rt-dyn.2.6.0\build\native\include" /Zi /nologo /W3 /WX- /sdl /Od /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D FILESTORE_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt FileStore.cpp
+         FileStore.cpp
+     1>FileStore.cpp(8): warning C4273: 'Connect' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(19) : see previous definition of 'Connect'
+     1>FileStore.cpp(28): warning C4273: 'FolderCreate' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(22) : see previous definition of 'FolderCreate'
+     1>FileStore.cpp(43): warning C4273: 'FolderDelete' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(25) : see previous definition of 'FolderDelete'
+     1>FileStore.cpp(57): warning C4273: 'FolderList' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(28) : see previous definition of 'FolderList'
+     1>FileStore.cpp(61): error C3867: 'azure::storage::result_segment<azure::storage::cloud_blob_container>::continuation_token': function call missing argument list; use '&azure::storage::result_segment<azure::storage::cloud_blob_container>::continuation_token' to create a pointer to member
+     1>FileStore.cpp(78): error C3867: 'azure::storage::cloud_blob_container::name': function call missing argument list; use '&azure::storage::cloud_blob_container::name' to create a pointer to member
+     1>FileStore.cpp(78): error C2109: subscript requires array or pointer type
+     1>FileStore.cpp(95): warning C4273: 'FileCreate' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(31) : see previous definition of 'FileCreate'
+     1>FileStore.cpp(111): warning C4273: 'FileDelete' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(34) : see previous definition of 'FileDelete'
+     1>FileStore.cpp(126): warning C4273: 'FileList' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(37) : see previous definition of 'FileList'
+     1>FileStore.cpp(131): error C3867: 'azure::storage::result_segment<azure::storage::list_blob_item>::continuation_token': function call missing argument list; use '&azure::storage::result_segment<azure::storage::list_blob_item>::continuation_token' to create a pointer to member
+     1>FileStore.cpp(149): warning C4244: '=' : conversion from 'wchar_t' to 'char', possible loss of data
+     1>FileStore.cpp(165): warning C4273: 'FileRetrieve' : inconsistent dll linkage
+                 c:\users\rory\documents\visual studio 2013\projects\filestore\filestore\FileStore.h(40) : see previous definition of 'FileRetrieve'
+     1>FileStore.cpp(177): warning C4244: '=' : conversion from 'wchar_t' to 'char', possible loss of data
+     1>Done Building Project "c:\Users\rory\documents\visual studio 2013\Projects\FileStore\FileStore\FileStore.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.95
