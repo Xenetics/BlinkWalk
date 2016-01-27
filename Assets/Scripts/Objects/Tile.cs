@@ -56,6 +56,7 @@ public class Tile : MonoBehaviour
     /// <summary> Sanatized Tiles to empty </summary>
     private void SanatizeTile()
     {
+        m_Block.SetActive(false);
         m_Spike.SetActive(false);
         m_Start.SetActive(false);
         m_End.SetActive(false);

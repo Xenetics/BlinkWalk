@@ -2,23 +2,33 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AudioManager : Singleton<AudioManager> 
+public class AudioManager : MonoBehaviour
 {
-	protected AudioManager() { }
+    private static AudioManager instance = null;
+    public static AudioManager Instance { get { return instance; } }
 
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+
+        musicOn = true;
+        soundOn = true;
+    }
     [SerializeField]
     private List<GameObject> m_MusicPlayer; // maked this an array to use multiple musics so its a more general sound manager.
     [SerializeField]
     private List<AudioClip> m_Sounds;
     public bool musicOn { get; set; }
     public bool soundOn { get; set; }
-
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-        musicOn = true;
-        soundOn = true;
-    }
 
     void Start () 
 	{

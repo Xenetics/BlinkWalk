@@ -1,9 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameManager : Singleton<GameManager> 
+public class GameManager : MonoBehaviour
 {
-    protected GameManager() { }
+    private static GameManager instance = null;
+    public static GameManager Instance { get { return instance; } }
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(this.gameObject);
+
+        stateGameIntro = new StateGameIntro(this);
+        stateGameMenu = new StateGameMenu(this);
+        stateGamePlaying = new StateGamePlaying(this);
+        stateGameWon = new StateGameWon(this);
+        stateGameLost = new StateGameLost(this);
+    }
     private static int stateNumber;
 	public static GameState currentState;                      // State Numbers
     public StateGameIntro stateGameIntro { get; set; }  // 0
@@ -11,17 +32,6 @@ public class GameManager : Singleton<GameManager>
 	public StateGamePlaying stateGamePlaying{get;set;}  // 2
 	public StateGameWon stateGameWon{get;set;}          // 3
 	public StateGameLost stateGameLost{get;set;}        // 4
-
-	private void Awake () 
-	{
-        DontDestroyOnLoad(this.gameObject);
-
-        stateGameIntro = new StateGameIntro(this);
-        stateGameMenu = new StateGameMenu(this);
-		stateGamePlaying = new StateGamePlaying(this);
-		stateGameWon = new StateGameWon(this);
-		stateGameLost = new StateGameLost(this);
-	}
 	
 	private void Start () 
 	{

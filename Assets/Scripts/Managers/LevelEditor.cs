@@ -7,10 +7,23 @@ using UnityEngine.UI;
 /// Created -> 10/25/15
 /// Handle level editing
 /// </summary>
-public class LevelEditor : Singleton<LevelEditor>
+public class LevelEditor : MonoBehaviour
 {
-    protected LevelEditor() { }
+    private static LevelEditor instance = null;
+    public static LevelEditor Instance { get { return instance; } }
 
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+    }
     /// <summary> UI object for the import file name input </summary>
     [SerializeField]
     private InputField m_ImportInput;
@@ -31,11 +44,14 @@ public class LevelEditor : Singleton<LevelEditor>
     /// <summary> Selected Tile object </summary>
     [HideInInspector]
     public Tile SelectedTile;
+    /// <summary> The tile at the Center of the sheet </summary>
+    public GameObject CenterTile;
 
 	void Start ()
     {
         m_Tiles = new List<GameObject>();
-        BuildTiles();   
+        BuildTiles();
+        //CenterTile = FindCenterTile();
     }
 	
     /// <summary> Builds the tile grid a column at a time </summary>
@@ -54,18 +70,38 @@ public class LevelEditor : Singleton<LevelEditor>
         }
     }
 
-    /// <summary>  </summary>
+    /// <summary> Exports the Level to azure storage </summary>
     public void Export()
     {
         // Build string / File
         // Call to azure helper
     }
 
-    /// <summary>  </summary>
+    /// <summary> Imports the level from azure storage </summary>
     public void Import()
     {
         // use input to call into azure
         // decode string / File
         // build level
+    }
+
+    /// <summary> Finds the tile at the center of the sheet </summary>
+    public GameObject FindCenterTile()
+    {
+        return m_Tiles[(m_Tiles.Count / 2) + (m_Height / 2)];
+    }
+
+    /// <summary> Returns the height of tile set </summary>
+    /// <returns> Height of tile set </returns>
+    public int GetHeight()
+    {
+        return m_Height;
+    }
+
+    /// <summary> Returns the width of tile set </summary>
+    /// <returns> width of tile set </returns>
+    public int GetWidth()
+    {
+        return m_Width;
     }
 }

@@ -6,9 +6,23 @@ using UnityEngine.UI;
 /// Created -> 10/25/15
 /// Raycast mouse pointer for selection
 /// </summary>
-public class RaycastMouse : Singleton<RaycastMouse> 
+public class RaycastMouse : MonoBehaviour
 {
-    protected RaycastMouse() { }
+    private static RaycastMouse instance = null;
+    public static RaycastMouse Instance { get{ return instance; } }
+
+    void Awake()
+    {
+        if(instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+    }
 
     /// <summary> Mouse Coordinates on click </summary>
 	private Vector2 m_MouseCoord;
@@ -20,6 +34,11 @@ public class RaycastMouse : Singleton<RaycastMouse>
     private float m_CamSpeed = 0.5f;
     [HideInInspector]
     public bool Busy = false;
+
+    void Start()
+    {
+        Camera.main.transform.position = new Vector3(LevelEditor.Instance.CenterTile.transform.position.x, LevelEditor.Instance.CenterTile.transform.position.y, Camera.main.transform.position.z);
+    }
 
     void Update () 
 	{
@@ -42,7 +61,7 @@ public class RaycastMouse : Singleton<RaycastMouse>
             }
         }
 
-        if (Vector2.Distance(Camera.main.transform.position, Camera.main.ScreenToWorldPoint(m_MouseCoord)) > Camera.main.orthographicSize)
+        if (!m_Popup.activeSelf && (Vector2.Distance(Camera.main.transform.position, Camera.main.ScreenToWorldPoint(m_MouseCoord)) > Camera.main.orthographicSize))
         {
             Vector2 newPos = Camera.main.ScreenToWorldPoint(m_MouseCoord);
             Camera.main.transform.position =  Vector3.Lerp(Camera.main.transform.position, new Vector3(newPos.x, newPos.y, Camera.main.transform.position.z), 0.5f * Time.deltaTime);

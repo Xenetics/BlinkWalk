@@ -7,9 +7,23 @@ using UnityEngine.UI;
 /// Created -> 10/25/15
 /// Popup Manager script for Tile Selection
 /// </summary>
-public class TileSelectionPopup : Singleton<TileSelectionPopup>
+public class TileSelectionPopup : MonoBehaviour
 {
-    protected TileSelectionPopup() { }
+    private static TileSelectionPopup instance = null;
+    public static TileSelectionPopup Instance { get { return instance; } }
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+    }
 
     /// <summary> Scroll Area that will contain list objects </summary>
     [SerializeField]
@@ -34,11 +48,11 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
         BuildList();
     }
 
-    /// <summary>  </summary>
+    /// <summary> Builds the list of tile types to select </summary>
     private void BuildList()
     {
         m_Spacing = (int)Tile.TileType.COUNT * (m_ListPrefab.GetComponent<RectTransform>().sizeDelta.y) * m_SpacingPercent;
-        m_ScrollArea.GetComponent<RectTransform>().sizeDelta =  new Vector2(m_ScrollArea.GetComponent<RectTransform>().sizeDelta.x
+        m_ScrollArea.GetComponent<RectTransform>().sizeDelta =  new Vector2(m_ScrollArea.transform.parent.GetComponent<RectTransform>().sizeDelta.x
                                                                             , m_Spacing
                                                                             + ((int)Tile.TileType.COUNT * (m_ListPrefab.GetComponent<RectTransform>().sizeDelta.y + m_Spacing)));
         m_ScrollArea.GetComponent<RectTransform>().position =   new Vector2(m_ScrollArea.transform.parent.GetComponent<RectTransform>().position.x
@@ -48,27 +62,27 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
         for (int i = 0; i < (int)Tile.TileType.COUNT; i++)
         {
             GameObject temp = Instantiate(m_ListPrefab);
-              
-            if (i != 0)
+            temp.transform.SetParent(m_ScrollArea.transform.parent);
+            temp.transform.localScale = new Vector3(1, 1, 1);
+
+            if (i == 0)
             {
-                temp.GetComponent<RectTransform>().position =   new Vector3(m_ScrollArea.GetComponent<RectTransform>().position.x
-                                                                            , m_ListObjects[i - 1].GetComponent<RectTransform>().position.y
-                                                                            - m_ListPrefab.GetComponent<RectTransform>().sizeDelta.y 
-                                                                            - m_Spacing
-                                                                            , m_ListPrefab.transform.position.z);
+                temp.GetComponent<RectTransform>().localPosition    = new Vector2(m_ScrollArea.transform.localPosition.x
+                                                                                , m_ScrollArea.GetComponent<RectTransform>().anchoredPosition.y
+                                                                                + (m_ScrollArea.GetComponent<RectTransform>().sizeDelta.y * 0.5f)
+                                                                                - (m_ListPrefab.GetComponent<RectTransform>().sizeDelta.y * 0.5f)
+                                                                                - m_Spacing);
+                temp.transform.SetParent(m_ScrollArea.transform);
             }
             else
             {
-                temp.GetComponent<RectTransform>().position =   new Vector3(m_ScrollArea.GetComponent<RectTransform>().position.x
-                                                                            , m_ScrollArea.GetComponent<RectTransform>().position.y
-                                                                            + (m_ScrollArea.GetComponent<RectTransform>().sizeDelta.y * 0.5f)
-                                                                            - (m_ListPrefab.GetComponent<RectTransform>().sizeDelta.y * 0.5f)
-                                                                            - m_Spacing
-                                                                            , m_ListPrefab.transform.position.z);
+                temp.transform.SetParent(m_ScrollArea.transform);
+                temp.GetComponent<RectTransform>().localPosition    = new Vector2(m_ScrollArea.transform.localPosition.x
+                                                                                , m_ListObjects[i - 1].transform.localPosition.y
+                                                                                - m_ListPrefab.GetComponent<RectTransform>().sizeDelta.y
+                                                                                - m_Spacing);
             }
-            temp.transform.SetParent(m_ScrollArea.transform);
-            temp.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-
+            
             temp.GetComponent<TileListObject>().Tiletype = (Tile.TileType)i;
             temp.GetComponent<TileListObject>().Title.text = temp.GetComponent<TileListObject>().Tiletype.ToString();
             temp.GetComponent<TileListObject>().ListPopup = gameObject;
@@ -76,7 +90,7 @@ public class TileSelectionPopup : Singleton<TileSelectionPopup>
         }
     }
 
-    /// <summary>  </summary>
+    /// <summary> Closes the tile selection popup </summary>
     public void Close()
     {
         gameObject.SetActive(false);

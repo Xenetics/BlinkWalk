@@ -5,10 +5,23 @@ using System.Collections;
 
 // Used for all Main menu functionality and interaction with the game manager
 
-public class MenuManager : Singleton<MenuManager> 
+public class MenuManager : MonoBehaviour 
 {
-    protected MenuManager() { }
+    private static MenuManager instance = null;
+    public static MenuManager Instance { get { return instance; } }
 
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+    }
     private float transitionSpeed = 2.0f;
     private bool transitioning = false;
     private bool transitioningIn = true;

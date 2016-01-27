@@ -13,6 +13,7 @@ public class TileListObject : MonoBehaviour
     /// <summary> The tile type this will select </summary>
     [HideInInspector]
     public Tile.TileType Tiletype;
+    /// <summary> The list popup object </summary>
     [HideInInspector]
     public GameObject ListPopup;
 
