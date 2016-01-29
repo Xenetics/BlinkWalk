@@ -69,6 +69,7 @@ public class MenuManager : MonoBehaviour
 
 	void Start () 
     {
+        mainBackdrop.color = Color.white;
         currentCanvas = menuCanvas;
         currentBackdrop = mainBackdrop;
 	}

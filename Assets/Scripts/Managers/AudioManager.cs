@@ -24,27 +24,16 @@ public class AudioManager : MonoBehaviour
         soundOn = true;
     }
     [SerializeField]
-    private List<GameObject> m_MusicPlayer; // maked this an array to use multiple musics so its a more general sound manager.
+    private List<GameObject> m_MusicPlayer = new List<GameObject>();
     [SerializeField]
-    private List<AudioClip> m_Sounds;
+    private List<AudioClip> m_Sounds = new List<AudioClip>();
     public bool musicOn { get; set; }
     public bool soundOn { get; set; }
-
-    void Start () 
-	{
-        m_MusicPlayer = new List<GameObject>();
-        m_Sounds = new List<AudioClip>();
-	}
 	
 	void Update () 
 	{
         ApplyMute();
 	}
-
-    void LateUpdate()
-    {
-
-    }
 
 	public void PlaySound(string toPlay)
 	{
@@ -72,7 +61,7 @@ public class AudioManager : MonoBehaviour
             }
             else
             {
-                m_MusicPlayer[i].transform.parent = gameObject.transform;
+                gameObject.transform.SetParent(m_MusicPlayer[i].transform.parent);
                 m_MusicPlayer[i].GetComponent<AudioSource>().mute = true;
                 if (m_MusicPlayer[i].GetComponent<AudioSource>().isPlaying)
                 {

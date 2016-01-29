@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class RunnerPlayerController : MonoBehaviour 
+public class RunnerPlayerController : MonoBehaviour
 {
     [SerializeField]
     private GameObject entity;
@@ -23,8 +23,9 @@ public class RunnerPlayerController : MonoBehaviour
     [SerializeField]
     private float jumpForce = 800;
     private bool isAlive = true;
-    private bool grounded = true;
+    public bool grounded = true;
     private bool crouching = false;
+    private bool Vision = false;
     [SerializeField]
     private float crouchtime = 1.5f;
     private float crouchTimer;
@@ -56,12 +57,12 @@ public class RunnerPlayerController : MonoBehaviour
         entityOrigin = entity.transform.position;
     }
 
-	void Start () 
+    void Start()
     {
-	
-	}
-	
-	void Update () 
+
+    }
+
+    void Update()
     {
         if (GameManager.WhatState() == "playing" && InGameUIManager.Instance.paused == false)
         {
@@ -72,8 +73,7 @@ public class RunnerPlayerController : MonoBehaviour
                 {
                     if (Input.GetButtonDown("Jump") || Input.touchCount == 1)
                     {
-                        entityPhysics.AddForce(new Vector2(0, jumpForce));
-                        grounded = false;
+                        Jump();
                     }
 
                     if (entity.transform.position.x < entityOrigin.x)
@@ -84,12 +84,12 @@ public class RunnerPlayerController : MonoBehaviour
 
                 if (Input.GetButtonDown("Crouch") || Input.touchCount == 2)
                 {
-                    crouching = true;
+                    Crouch();
                 }
 
                 if (currentVision > 0.0f)
                 {
-                    if (Input.GetButton("Vision"))
+                    if (Input.GetButton("Vision") || Vision)
                     {
                         currentVision -= Time.deltaTime;
                         Camera.main.cullingMask = LayerMask.NameToLayer("Everything");
@@ -129,7 +129,28 @@ public class RunnerPlayerController : MonoBehaviour
                 InGameUIManager.Instance.EndGame();
             }
         }
-	}
+    }
+
+    public void Jump()
+    {
+        entityPhysics.AddForce(new Vector2(0, jumpForce));
+        grounded = false;
+    }
+
+    public void Crouch()
+    {
+        crouching = true;
+    }
+
+    public void VisionOn()
+    {
+        Vision = true;
+    }
+
+    public void VisionOff()
+    {
+        Vision = false;
+    }
 
     void OnCollisionEnter2D(Collision2D other)
     {
