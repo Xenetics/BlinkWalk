@@ -46,12 +46,16 @@ public class LevelEditor : MonoBehaviour
     public Tile SelectedTile;
     /// <summary> The tile at the Center of the sheet </summary>
     public GameObject CenterTile;
+    /// <summary> Min Bounds </summary>
+    public Vector2 MinBounds = new Vector2();
+    /// <summary> Max Bounds </summary>
+    public Vector2 MaxBounds = new Vector2();
 
-	void Start ()
+    void Start ()
     {
         m_Tiles = new List<GameObject>();
         BuildTiles();
-        //CenterTile = FindCenterTile();
+        FindBounds();
     }
 	
     /// <summary> Builds the tile grid a column at a time </summary>
@@ -89,6 +93,15 @@ public class LevelEditor : MonoBehaviour
     public GameObject FindCenterTile()
     {
         return m_Tiles[(m_Tiles.Count / 2) + (m_Height / 2)];
+    }
+
+    /// <summary> Finds the minimum & maximum X & Y coord for the tiles </summary>
+    private void FindBounds()
+    {
+        MaxBounds.x = m_Width;
+        MaxBounds.y = m_Height;
+        MinBounds.x = 0;
+        MinBounds.y = 0;
     }
 
     /// <summary> Returns the height of tile set </summary>
