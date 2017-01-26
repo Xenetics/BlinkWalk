@@ -5,7 +5,7 @@ using UnityEngine;
 public class SlideUpMenu : MonoBehaviour
 {
     [SerializeField]
-    private GameObject m_MenuBox;
+    private GameObject m_Arrow;
     private Vector3 m_Origin;
     private Vector3 m_ActivePos;
     private bool m_Active = false;
@@ -14,13 +14,21 @@ public class SlideUpMenu : MonoBehaviour
     void Start()
     {
         m_Origin = transform.position;
-        m_ActivePos = m_MenuBox.GetComponent<RectTransform>().position;
-        m_ActivePos.y += m_MenuBox.GetComponent<RectTransform>().sizeDelta.y - 20;
+        m_ActivePos = GetComponent<RectTransform>().position;
+        m_ActivePos.y += GetComponent<RectTransform>().sizeDelta.y - 20;
     }
 
     public void MenuButton()
     {
         m_Active = !m_Active;
+        if(m_Active)
+        {
+            m_Arrow.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 180);
+        }
+        else
+        {
+            m_Arrow.GetComponent<RectTransform>().rotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 
 	void Update ()
