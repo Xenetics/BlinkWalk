@@ -31,13 +31,11 @@ public class PlatformPlayerControl : MonoBehaviour
 
     [SerializeField]
     private bool crouching = false;
-    private Vector3 crouchDestination;
-    private float crouchSpeed = 4f;
     [SerializeField]
     private float crouchtime = 1.5f;
     private float crouchTimer;
 
-    private List<Vector3> colliding = new List<Vector3>();
+    private List<Vector2> colliding = new List<Vector2>();
 
     private static PlatformPlayerControl instance = null;
     public static PlatformPlayerControl Instance { get { return instance; } }
@@ -105,22 +103,12 @@ public class PlatformPlayerControl : MonoBehaviour
             if (Input.GetButton("Crouch"))
             {
                 crouching = true;
-                crouchDestination = new Vector3(3, 1.5f, 1);
-                if (entity.transform.localScale != crouchDestination)
-                {
-                    SmoothCrouch();
-                }
-                //entity.transform.localScale = new Vector3(3, 1.5f, 1);
+                entity.transform.localScale = new Vector3(3, 1.5f, 1);
             }
             else
             {
                 crouching = false;
-                crouchDestination = new Vector3(2, 3, 1);
-                if (entity.transform.localScale != crouchDestination)
-                {
-                    SmoothCrouch();
-                }
-                //entity.transform.localScale = new Vector3(2, 3, 1);
+                entity.transform.localScale = new Vector3(2, 3, 1);
             }
             /*
             if (entity.transform.position.y < botOutOfScreen || entity.transform.position.x < leftOutOfScreen)
@@ -136,19 +124,8 @@ public class PlatformPlayerControl : MonoBehaviour
         HandleTrail();
     }
 
-    private void SmoothCrouch()
-    {
-        entity.transform.localScale = Vector3.Lerp(entity.transform.localScale, crouchDestination, Time.deltaTime * crouchSpeed);
-        if(Vector3.Distance(entity.transform.localScale, crouchDestination) < 0.05f)
-        {
-            entity.transform.localScale = crouchDestination;
-        }
-    }
-
     void OnCollisionEnter2D(Collision2D other)
     {
-        walledRight = false;
-        walledLeft = false;
         if (other.contacts.Length > 0)
         {
             foreach (ContactPoint2D contact in other.contacts)
@@ -158,20 +135,20 @@ public class PlatformPlayerControl : MonoBehaviour
                     grounded = true;
                 }
 
-                if (Vector2.Dot(contact.normal, -Vector2.right) > 0.5)
+                if ((other.transform.position.y + other.collider.bounds.max.y) > (transform.position.y + boxCollider.bounds.min.y)
+                    && (other.transform.position.y + other.collider.bounds.min.y) < (transform.position.y + boxCollider.bounds.max.y))
                 {
-                    walledRight = true;
-                }
+                    if (Vector2.Dot(contact.normal, -Vector2.right) > 0.5)
+                    {
+                        walledRight = true;
+                    }
 
-                if (Vector2.Dot(contact.normal, Vector2.right) > 0.5)
-                {
-                    walledLeft = true;
+                    if (Vector2.Dot(contact.normal, Vector2.right) > 0.5)
+                    {
+                        walledLeft = true;
+                    }
                 }
             }
-        }
-        if (!colliding.Contains(other.transform.position))
-        {
-            colliding.Add(other.transform.position);
         }
     }
 
@@ -192,7 +169,6 @@ public class PlatformPlayerControl : MonoBehaviour
                 }
             }
         }
-        colliding.Remove(other.transform.position);
     }
 
     void OnCollisionStay2D(Collision2D other)
@@ -235,12 +211,8 @@ public class PlatformPlayerControl : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
+    private void OnGUI()
     {
-        foreach(Vector2 vec in colliding)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(vec, new Vector3(1, 1, 1));
-        }
+        
     }
 }
