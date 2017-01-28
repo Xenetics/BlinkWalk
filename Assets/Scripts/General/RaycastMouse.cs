@@ -52,7 +52,7 @@ public class RaycastMouse : MonoBehaviour
     void Update () 
 	{
         m_MouseCoord = Input.mousePosition;
-        if (Input.GetMouseButtonDown(0) && Busy == false)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0) && Busy == false)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
