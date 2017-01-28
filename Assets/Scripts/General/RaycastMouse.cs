@@ -74,7 +74,7 @@ public class RaycastMouse : MonoBehaviour
 
     private void CameraMovement()
     {
-        if (!MouseOffScreen() && !MouseInDeadzone())
+        if (Input.GetMouseButton(1) && !MouseOffScreen() && !MouseInDeadzone())
         {
             if (!m_Popup.activeSelf)
             {
